@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parde</title>
+<meta name="description" content="Parde (پرده) — hear and measure the intervals of Persian music. Scale patterns after Nosa's ScalesTest app (music.nosa.com/ScalesTest), based on the research of Maestro Hamid Motebassem and Mehrdad Momeni.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232c4a9a'/%3E%3Cpath d='M9 7v18M9 15l12 5-12 5' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Vazirmatn:wght@400;600&display=swap">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+:root{
+  --bg:#f2f3f7; --surface:#ffffff; --sunk:#e8ebf2; --ink:#1b2233; --muted:#5a6377; --line:#d6dbe6;
+  --T:#2c4a9a; --B:#b0721a; --J:#12837c; --S:#a3405a; --H:#6a4a9c;
+  --accent:#2c4a9a; --good:#1f7a4a; --bad:#b3382f;
+  --tint:.14;
+  --display:"Marcellus", "Palatino Linotype", Georgia, serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --fa:"Vazirmatn", "Geeza Pro", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0e121a; --surface:#161b26; --sunk:#1d2330; --ink:#e6e9f0; --muted:#98a1b4; --line:#2a3142;
+    --T:#8ca6f2; --B:#e3aa4f; --J:#4cc4b9; --S:#e7849c; --H:#b095e6;
+    --accent:#8ca6f2; --good:#5fc98c; --bad:#ef7a70; --tint:.2;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0e121a; --surface:#161b26; --sunk:#1d2330; --ink:#e6e9f0; --muted:#98a1b4; --line:#2a3142;
+  --T:#8ca6f2; --B:#e3aa4f; --J:#4cc4b9; --S:#e7849c; --H:#b095e6;
+  --accent:#8ca6f2; --good:#5fc98c; --bad:#ef7a70; --tint:.2;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:20px 60px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.brand h1{font-family:var(--display);font-weight:400;font-size:2rem;margin:0;letter-spacing:.01em;line-height:1.1}
+.brand .fa{font-family:var(--fa);color:var(--muted);font-size:.95rem;margin-inline-start:.5rem}
+.brand p{margin:.2rem 0 0;color:var(--muted);font-size:.9rem;max-width:60ch}
+nav.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:16px}
+nav.tabs button{font:inherit;font-weight:500;background:none;border:1px solid transparent;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--surface);border-color:var(--line);color:var(--ink)}
+nav.tabs button:hover{color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.panel{margin-top:20px}
+h2{font-family:var(--display);font-weight:400;font-size:1.45rem;margin:0 0 .3rem;text-wrap:balance}
+h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .5rem;font-weight:600}
+p{margin:.3rem 0 .7rem;max-width:68ch}
+.muted{color:var(--muted)}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted);font-weight:500}
+select,input[type=number]{font:inherit;font-size:.92rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
+input[type=range]{accent-color:var(--accent);width:120px}
+.btn{font:inherit;font-size:.9rem;font-weight:500;padding:7px 13px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn.on{background:var(--sunk);border-color:var(--accent)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.grid2{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.mode-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.mode-title .fa{font-family:var(--fa);font-size:1.3rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.chip{font-family:var(--mono);font-size:.8rem;padding:2px 8px;border-radius:4px;color:var(--c);background:color-mix(in srgb,var(--c) calc(var(--tint)*100%),transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.chip.sep{--c:var(--muted);background:none;border:none;padding:2px 2px}
+/* ruler */
+.ruler{position:relative;margin:8px 0 46px}
+.ruler .lab{font-size:.75rem;color:var(--muted);margin-bottom:3px;display:flex;justify-content:space-between;gap:8px}
+.ruler .bar{display:flex;height:40px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.seg{--c:var(--T);display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid var(--surface);background:color-mix(in srgb,var(--c) calc(var(--tint)*100% + 6%),var(--surface));color:var(--c);cursor:pointer;min-width:0;font-family:var(--mono);line-height:1.1;border-top:3px solid var(--c)}
+.seg:last-child{border-right:none}
+.seg b{font-size:.85rem}
+.seg small{font-size:.66rem;opacity:.85}
+.seg:hover{filter:brightness(1.08)}
+.ticks{position:absolute;left:0;right:0;top:0;height:40px}
+.tick{position:absolute;top:0;transform:translateX(-50%);text-align:center;font-size:.72rem;white-space:nowrap;cursor:pointer}
+.tick .n{font-family:var(--mono);color:var(--muted);font-size:.68rem;display:block}
+.tick .nm{font-weight:500}
+.tick.hot .nm{color:var(--accent)}
+.diffmark{position:absolute;top:-4px;height:calc(100% + 8px);border-left:2px dashed var(--S)}
+/* wheel */
+svg.wheel{width:100%;max-width:300px;height:auto;display:block;margin:auto}
+svg.wheel text{font-family:var(--body)}
+.dot{cursor:pointer}
+.dot.hot circle{stroke:var(--ink);stroke-width:3}
+/* table */
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dev-big{color:var(--S);font-weight:600}
+.acc{display:inline-block;vertical-align:-2px;margin-left:1px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}
+.fact{background:var(--sunk);border-radius:8px;padding:10px 12px}
+.fact .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.fact .v{font-size:.92rem;margin-top:2px}
+.note{font-size:.82rem;color:var(--muted);border-left:2px solid var(--line);padding-left:10px;margin-top:12px}
+.stack{display:flex;flex-direction:column;gap:16px}
+/* intervals */
+.ivgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.iv{--c:var(--T);background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.iv .sym{font-family:var(--display);font-size:2rem;color:var(--c);line-height:1}
+.iv .nm{font-weight:600}
+.iv .fa{font-family:var(--fa);color:var(--muted)}
+.iv .num{font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+.formula{font-family:var(--mono);background:var(--sunk);padding:10px 12px;border-radius:6px;overflow-x:auto;font-size:.88rem}
+/* quiz */
+.qtypes{display:flex;flex-wrap:wrap;gap:6px}
+.qarea{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.answers{display:flex;flex-wrap:wrap;gap:8px}
+.answers .btn{min-width:88px;justify-content:center}
+.answers .btn.right{background:color-mix(in srgb,var(--good) 20%,var(--surface));border-color:var(--good)}
+.answers .btn.wrong{background:color-mix(in srgb,var(--bad) 18%,var(--surface));border-color:var(--bad)}
+.fb{min-height:1.5em;font-weight:500}
+.fb.good{color:var(--good)} .fb.bad{color:var(--bad)}
+.score{display:flex;gap:18px;font-family:var(--mono);font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.score b{color:var(--ink)}
+.turn{font-weight:600;color:var(--accent)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.turn.live{animation:pulse 1s infinite}
+@media (prefers-reduced-motion:reduce){.turn.live{animation:none}}
+/* plan */
+.stage{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.stage:last-child{border-bottom:none}
+.stage .no{font-family:var(--display);font-size:1.6rem;color:var(--accent);width:2ch;text-align:center}
+.stage h4{margin:0 0 4px;font-size:1rem}
+.stage ul{margin:4px 0 0;padding-left:18px}
+.stage li{margin:2px 0}
+label.chk{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+label.chk input{margin-top:4px;accent-color:var(--accent)}
+.routine{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.rstep{background:var(--sunk);border-radius:8px;padding:12px}
+.rstep .t{font-family:var(--mono);font-size:.8rem;color:var(--accent)}
+#aStat[data-s="live"]{color:var(--good)}#aStat[data-s="blocked"]{color:var(--bad)}
+kbd{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--surface)}
+/* bilingual + credit */
+.wrap[dir="rtl"]{font-family:var(--fa)}
+.wrap[dir="rtl"] *{letter-spacing:0 !important}
+.wrap[dir="rtl"] h1,.wrap[dir="rtl"] h2,.wrap[dir="rtl"] .stage .no{font-family:var(--fa);font-weight:600}
+.wrap[dir="rtl"] h3,.wrap[dir="rtl"] th,.wrap[dir="rtl"] .fact .k{text-transform:none;font-size:.85rem}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.wrap[dir="rtl"] .score,.wrap[dir="rtl"] .rstep .t{font-family:var(--fa)}
+th,td{text-align:start}
+.note{border-left:none;border-inline-start:2px solid var(--line);padding-left:0;padding-inline-start:10px}
+.topright{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.wrap[dir="rtl"] .topright{align-items:flex-start}
+.langbtn{font-family:var(--fa)}
+.wrap[dir="rtl"] .langbtn{font-family:var(--body)}
+a{color:var(--accent)}
+.credit{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.86rem}
+.credit .lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);padding-top:2px}
+.credit p{margin:0 0 .35rem;max-width:none}
+.credit p:last-child{margin-bottom:0}
+@media (max-width:600px){.credit{grid-template-columns:1fr}}
+.fbrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:.5rem!important}
+.fbrow .btn{padding:4px 10px;font-size:.85rem}
+.srcbadge{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:none}
+a.srcbadge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+</style>
+
+<div class="wrap" id="app" dir="ltr" lang="en">
+  <header class="top">
+    <div class="brand">
+      <h1 id="h1"></h1>
+      <p data-i18n="sub"></p>
+    </div>
+    <div class="topright">
+      <button class="btn langbtn" id="langBtn" type="button"></button>
+      <div class="controls" aria-label="Sound settings">
+        <label class="field"><span data-i18n="tuning"></span>
+          <select id="tuning"><option value="pyth" data-i18n="tun_pyth"></option><option value="q" data-i18n="tun_q"></option></select>
+        </label>
+        <label class="field"><span data-i18n="sound"></span>
+          <select id="timbre"><option value="pluck" data-i18n="pluck"></option><option value="sine" data-i18n="sine"></option></select>
+        </label>
+        <label class="field"><span data-i18n="volume"></span> <input type="range" id="vol" min="0" max="1" step="0.05" value="0.8"></label>
+        <div class="field"><span id="aStat" data-s="unknown"></span><button class="btn" id="aTest" data-i18n="test"></button></div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="credit" id="credit" aria-labelledby="creditLbl">
+    <div class="lbl" id="creditLbl" data-i18n="credit_lbl"></div>
+    <div data-i18n="credit_body"></div>
+  </aside>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="explore" aria-selected="true" data-i18n="tab_explore"></button>
+    <button role="tab" data-tab="intervals" aria-selected="false" data-i18n="tab_intervals"></button>
+    <button role="tab" data-tab="ear" aria-selected="false" data-i18n="tab_ear"></button>
+    <button role="tab" data-tab="plan" aria-selected="false" data-i18n="tab_plan"></button>
+  </nav>
+
+  <!-- EXPLORER -->
+  <section class="panel" id="tab-explore">
+    <div class="box">
+      <div class="controls">
+        <label class="field"><span data-i18n="mode"></span> <select id="mode"></select></label>
+        <label class="field"><span data-i18n="cmp"></span> <select id="cmp"></select></label>
+        <label class="field"><span data-i18n="tonic"></span> <select id="tonic"></select></label>
+        <label class="field"><span data-i18n="tempo"></span> <span><input type="range" id="bpm" min="40" max="160" value="84"> <span id="bpmv" class="muted">84</span></span></label>
+      </div>
+      <div class="btnrow" style="margin-top:12px">
+        <button class="btn primary" id="pUp" data-i18n="up"></button>
+        <button class="btn" id="pDown" data-i18n="down"></button>
+        <button class="btn" id="pBoth" data-i18n="both"></button>
+        <button class="btn" id="pCmp" data-i18n="pcmp"></button>
+        <button class="btn" id="pDrone" aria-pressed="false"></button>
+        <button class="btn" id="pEcho" data-i18n="echo"></button>
+        <button class="btn" id="pStop" data-i18n="stop"></button>
+      </div>
+      <div id="echoStatus" class="muted" style="margin-top:8px;min-height:1.4em"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="box">
+        <h3 data-i18n="wheel_h"></h3>
+        <div id="wheel" class="ltr"></div>
+        <p class="muted" style="font-size:.8rem;margin-top:8px" id="wheelNote"></p>
+      </div>
+      <div class="box stack">
+        <div>
+          <div class="mode-title"><h2 id="mName"></h2><span class="fa" id="mFa"></span></div>
+          <div class="chips ltr" id="mChips"></div>
+          <p id="mDesc"></p>
+          <div id="mSrc"></div>
+        </div>
+        <div>
+          <h3 data-i18n="ruler_h"></h3>
+          <div id="rulers" class="ltr"></div>
+        </div>
+        <div class="facts" id="facts"></div>
+      </div>
+    </div>
+
+    <div class="box" style="margin-top:16px">
+      <h3 data-i18n="deg_h"></h3>
+      <div class="tbl"><table id="dtable"></table></div>
+      <p class="note" data-i18n="model_note"></p>
+    </div>
+  </section>
+
+  <!-- INTERVALS -->
+  <section class="panel" id="tab-intervals" hidden>
+    <div class="stack">
+      <div class="box">
+        <h2 data-i18n="iv_h2"></h2>
+        <p data-i18n="iv_p"></p>
+        <div class="ivgrid" id="ivgrid"></div>
+      </div>
+      <div class="box">
+        <h2 data-i18n="cents_h2"></h2>
+        <p data-i18n="cents_p"></p>
+        <div class="formula ltr">cents = 1200 · log₂(f₂ / f₁)&nbsp;&nbsp;&nbsp;&nbsp;e.g. 9/8 → 1200·log₂(1.125) = 203.9¢</div>
+        <div class="controls" style="margin-top:12px">
+          <label class="field">f₁ (Hz) <input type="number" id="f1" value="261.63" step="0.01" style="width:110px"></label>
+          <label class="field">f₂ (Hz) <input type="number" id="f2" value="285" step="0.01" style="width:110px"></label>
+          <button class="btn" id="fPlay" data-i18n="playboth"></button>
+          <div class="field"><span data-i18n="result"></span> <span id="fRes" style="font-family:var(--mono);color:var(--ink);font-size:.95rem"></span></div>
+        </div>
+        <p class="note" data-i18n="beats_note"></p>
+      </div>
+      <div class="box">
+        <h2 data-i18n="mm_h2"></h2>
+        <p data-i18n="mm_p"></p>
+        <div id="mmRulers" class="ltr"></div>
+        <div class="btnrow"><button class="btn" data-play="major" data-i18n="play_major"></button><button class="btn" data-play="minor" data-i18n="play_minor"></button><button class="btn" data-play="shur" data-i18n="play_shur"></button></div>
+        <p class="note" data-i18n="mm_note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EAR -->
+  <section class="panel" id="tab-ear" hidden>
+    <div class="box">
+      <h2 data-i18n="ear_h2"></h2>
+      <p class="muted" data-i18n="ear_p"></p>
+      <div class="qtypes" id="qtypes"></div>
+      <div class="controls" style="margin-top:12px">
+        <label class="field"><span data-i18n="level"></span> <select id="qlevel"></select></label>
+        <label class="field"><span data-i18n="playas"></span> <select id="qhow"><option value="mel" data-i18n="mel"></option><option value="harm" data-i18n="harm"></option></select></label>
+      </div>
+      <div class="qarea">
+        <div id="qprompt" style="font-weight:500"></div>
+        <div class="btnrow"><button class="btn" id="qReplay" data-i18n="replay"></button><button class="btn" id="qRef" data-i18n="hear"></button><button class="btn primary" id="qNext" data-i18n="next"></button></div>
+        <div class="answers" id="qans"></div>
+        <div class="fb" id="qfb"></div>
+        <div class="score" id="qscore"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section class="panel" id="tab-plan" hidden>
+    <div class="stack">
+      <div class="box">
+        <h2 data-i18n="daily_h2"></h2>
+        <div class="routine">
+          <div class="rstep"><div class="t" data-i18n="r1t"></div><span data-i18n="r1"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r2t"></div><span data-i18n="r2"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r3t"></div><span data-i18n="r3"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r4t"></div><span data-i18n="r4"></span></div>
+        </div>
+      </div>
+      <div class="box">
+        <h2 data-i18n="path_h2"></h2>
+        <p class="muted" data-i18n="path_p"></p>
+        <div id="stages"></div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('dlab-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('dlab-'+k,JSON.stringify(v))}catch(e){}}};
+const NOSA='https://music.nosa.com/ScalesTest/';
+
+/* ---------- text (English / فارسی) ---------- */
+const TX={
+en:{
+ h1:'Parde <span class="fa">پرده</span>',
+ sub:'Hear and measure the intervals of Persian music — from major and minor to the dastgahs, from the whole tone to the koron.',
+ lang:'فارسی',
+ tuning:'Tuning',tun_pyth:'Persian model (T 204¢ · B 90¢ · J 147¢)',tun_q:'Vaziri 24-TET (T 200 · B 100 · J 150)',
+ sound:'Sound',pluck:'Plucked string',sine:'Pure tone',volume:'Volume',test:'♪ Test sound',
+ st_live:'Sound ready',st_file:'Sound: compatibility mode',st_unknown:'Sound: press Test sound',st_blocked:'Sound blocked by the browser',
+ drone_on:'Drone: on',drone_off:'Drone: off',
+ credit_lbl:'Source',
+ credit_body:`<p>The scale patterns in Parde come from <a href="${NOSA}" target="_blank" rel="noopener"><b>Nosa's ScalesTest app</b></a> — <i>Key-signature system: representing key-signature classes and scales</i> (<span class="fa" lang="fa">نظام سرکلیدها</span>), test version 0.1, Dey 1401 — built on the research of Maestro <b>Hamid Motebassem</b> and <b>Mehrdad Momeni</b>, <i>A study toward standardising key signatures in the notation of Persian music</i>. Free use of that app is supported by NOSA (Iran Software &amp; Hardware Co.).</p><p class="muted">Parde is an independent study companion, not made by or affiliated with Nosa. Its creator does not have the musical knowledge of the creators of the Nosa app, so despite best efforts, errors and mistakes are possible. The cent values, sounds, exercises and descriptions are Parde's own; for authoritative diagrams and notation, rely on the original Nosa app.</p><p class="fbrow">Spotted a mistake or have a suggestion? <button class="btn" id="fbBtn" type="button">✎ Send feedback</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
+ tab_explore:'Scale explorer',tab_intervals:'Building blocks',tab_ear:'Ear training',tab_plan:'Practice path',
+ mode:'Mode',cmp:'Compare with',tonic:'Tonic',tempo:'Tempo',
+ up:'▲ Ascend',down:'▼ Descend',both:'Up &amp; down',pcmp:'Play mode, then comparison',echo:'Echo drill',stop:'■ Stop',
+ none:'— none —',g_Western:'Western',g_Dastgah:'Dastgah','g_Avaz & gusheh':'Avaz & gusheh',
+ wheel_h:'The octave as a circle · 1200 cents',
+ wheel_note:'Long ticks: 12-TET semitones (piano keys). Short ticks: quarter tones. Filled dots: {m}. Rings: comparison. Click a dot or press <kbd>1</kbd>–<kbd>8</kbd>.',
+ ruler_h:'Interval ruler · widths proportional to cents',deg_h:'Degrees in numbers',
+ model_note:'Interval patterns: Nosa ScalesTest (see Source above). The cent sizes are Parde\'s reference model, not Nosa\'s: in performance the koron\'s size moves with dastgah, gusheh and player, typically around 130–170¢ for J.',
+ src_nosa:'Pattern source: Nosa ScalesTest ↗',src_lab:'Pattern: standard Western theory — not listed in the Nosa app',
+ f_lower:'Lower tetrachord',f_deg4:'Degree 4',f_deg5:'Degree 5',f_upper:'Upper tetrachord',f_upperpart:'Upper part',
+ type:'type',notpure4:'not a pure fourth',pure4:'pure fourth ✓',pure5:'pure fifth ✓',from4:'¢ from a pure fourth',from5:'¢ from a pure fifth',deg58:'(degrees 5–8)',
+ vs:'vs',deg:'deg',identical:'identical pitches',compare:'Compare: ',
+ th:['Degree','Note','Cents from tonic','Step into it','Hz','Offset from piano'],between:'between keys',near:'≈ on a piano key (within 10¢)',
+ echo_listen:'Phrase {n}/8 · <span class="muted">listen…</span>',echo_turn:'Phrase {n}/8 · <span class="turn live">your turn — play it back</span> <span class="muted">(answer: {a})</span>',echo_done:'Echo drill finished — 8 phrases. Run it again or change mode.',
+ iv_h2:'Every scale here is built from five step sizes',
+ iv_p:'Western theory names only two steps — whole (T) and half (B). Persian theory adds the neutral step <b>J</b> (mojannab), the one you hear at a koron, and its complement <b>S</b>. Learn to hear these five and every scale in the explorer becomes a readable sentence. The letters follow the Nosa app.',
+ play:'Play',vsT:'vs T',qt:'24-TET: {n} quarter tones',
+ cents_h2:'Why cents?',cents_p:'Pitch perception is logarithmic: every octave doubles frequency. The cent turns ratios into additive numbers — 1200 per octave — so a scale is just a list of step sizes that sums to 1200.',
+ playboth:'Play both',result:'Result',calc:'{c}¢ · beats {b}/s · nearest step {k}',
+ beats_note:'Tuning tip for the setar: when two pitches are close, you hear beats at |f₁ − f₂| per second. Play a note against the drone and adjust until the beating slows to nothing.',
+ mm_h2:'Major and minor, written in steps',
+ mm_p:'A scale of 7 steps splits naturally into two <b>tetrachords</b> (four notes spanning a perfect fourth, 498¢) joined by a whole tone. Persian theory calls the tetrachord a <i>dang</i>. Change which small steps fill the fourth and you change the mode.',
+ play_major:'Play major',play_minor:'Play natural minor',play_shur:'Play Shur',
+ mm_note:'Notice: natural minor and Shur share every note except degree 2, which Shur lowers by about 57¢ to a koron.',
+ ear_h2:'Ear training',ear_p:'Each question plays automatically. Replay as often as you like — the goal is recognition, not speed.',
+ level:'Level',playas:'Play as',mel:'Melodic (one after the other)',harm:'Melodic, then together',
+ replay:'↻ Replay',hear:'Hear the choices',next:'Next question',
+ fb_ok:'Correct.',fb_no:'Not quite — it was {x}. Replay to hear it again.',
+ sc_all:'Overall',sc_20:'Last 20',sc_ready:' · ready for next level',sc_streak:'Streak',sc_best:'best',on:'on',
+ daily_h2:'Daily 20 minutes',
+ r1t:'0–3 min · Tune in',r1:'Explorer → drone on. Play the tonic on setar against the drone until the beating disappears. Then the fifth.',
+ r2t:'3–8 min · Walk the scale',r2:'Play the current stage\'s scale up and down with the app, then alone. Sing it once, on degree numbers.',
+ r3t:'8–15 min · Ear drill',r3:'Ear-training tab at your stage\'s exercise. Stop at 20 questions; note your score.',
+ r4t:'15–20 min · Echo',r4:'Echo drill: the app plays a 4-note phrase, you answer it on the setar in the gap. The answer appears after each phrase.',
+ fb_signin:'Feedback uses claude.ai comments — sign in to claude.ai to leave one.',fb_open:'Write your note in the comment box and post it.',fb_gh:'Opened GitHub in a new tab — a free GitHub account is needed to post.',
+ path_h2:'The path',path_p:'Move on when you score 85% or more over 20 questions, two days in a row. Ticks are saved in this browser.'
+},
+fa:{
+ h1:'پرده <span class="fa" lang="en" dir="ltr">Parde</span>',
+ sub:'شنیدن و سنجیدن فواصل موسیقی ایرانی — از ماژور و مینور تا دستگاه‌ها، از پرده تا کُرُن.',
+ lang:'English',
+ tuning:'سیستم فواصل',tun_pyth:'مدل ایرانی (T 204¢ · B 90¢ · J 147¢)',tun_q:'۲۴ ربع‌پرده‌ی وزیری (T 200 · B 100 · J 150)',
+ sound:'صدا',pluck:'سیم زخمه‌ای',sine:'صدای سینوسی',volume:'حجم صدا',test:'♪ آزمایش صدا',
+ st_live:'صدا آماده است',st_file:'صدا: حالت سازگاری',st_unknown:'صدا: «آزمایش صدا» را بزنید',st_blocked:'مرورگر صدا را مسدود کرده است',
+ drone_on:'واخوان: روشن',drone_off:'واخوان: خاموش',
+ credit_lbl:'منبع',
+ credit_body:`<p>الگوهای گام در «پرده» از <a href="${NOSA}" target="_blank" rel="noopener"><b>نرم‌افزار ScalesTest نوسا</b></a> گرفته شده است — «نظام سرکلیدها: بازنمایی کلاس‌های سرکلید و اشل‌ها»، نسخه‌ی آزمایشی ۰٫۱، دی ماه ۱۴۰۱ — بر اساس پژوهش استاد <b>حمید متبسم</b> و <b>مهرداد مومنی</b>، «پژوهشی برای تثبیت سرکلیدها در نگارش موسیقی ایرانی». استفاده‌ی آزاد از آن نرم‌افزار با پشتیبانی شرکت نرم‌افزار و سخت‌افزار ایران (نوسا) میسر شده است.</p><p class="muted">«پرده» یک ابزار آموزشی مستقل است و ساخته‌ی نوسا نیست و وابستگی به آن ندارد. سازنده‌ی این ابزار دانش موسیقایی پدیدآورندگان نرم‌افزار نوسا را ندارد؛ بنابراین با وجود همه‌ی تلاش‌ها، خطا و اشتباه ممکن است. مقادیر سنت، صداها، تمرین‌ها و توضیحات از خود این ابزار است؛ برای نمودارها و نگارش معتبر، به نرم‌افزار اصلی نوسا مراجعه کنید.</p><p class="fbrow">اشتباهی دیدید یا پیشنهادی دارید؟ <button class="btn" id="fbBtn" type="button">✎ ارسال بازخورد</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
+ tab_explore:'کاوشگر گام',tab_intervals:'فواصل پایه',tab_ear:'تربیت شنوایی',tab_plan:'مسیر تمرین',
+ mode:'گام / مُد',cmp:'مقایسه با',tonic:'نت پایه',tempo:'سرعت',
+ up:'▲ بالارونده',down:'▼ پایین‌رونده',both:'بالا و پایین',pcmp:'پخش گام، سپس گام مقایسه',echo:'تمرین پژواک',stop:'■ توقف',
+ none:'— هیچ —',g_Western:'غربی',g_Dastgah:'دستگاه','g_Avaz & gusheh':'آواز و گوشه',
+ wheel_h:'اکتاو به شکل دایره · ۱۲۰۰ سنت',
+ wheel_note:'خط‌های بلند: نیم‌پرده‌های تعدیل‌شده (کلیدهای پیانو). خط‌های کوتاه: ربع‌پرده‌ها. دایره‌های پر: {m}. حلقه‌ها: گام مقایسه. روی یک نقطه بزنید یا کلید <kbd>1</kbd> تا <kbd>8</kbd> را فشار دهید.',
+ ruler_h:'خط‌کش فواصل · پهنا متناسب با سنت',deg_h:'درجه‌ها به عدد',
+ model_note:'الگوهای فاصله‌ای: ScalesTest نوسا (بخش «منبع» را در بالا ببینید). اندازه‌های سنت مدل مرجع همین ابزارند، نه نوسا: در اجرا اندازه‌ی کُرُن با دستگاه، گوشه و نوازنده تغییر می‌کند؛ برای J معمولاً حدود ۱۳۰ تا ۱۷۰ سنت.',
+ src_nosa:'منبع الگو: ScalesTest نوسا ↗',src_lab:'الگو: نظریه‌ی استاندارد غربی — در نرم‌افزار نوسا نیامده',
+ f_lower:'دانگ پایین',f_deg4:'درجه‌ی ۴',f_deg5:'درجه‌ی ۵',f_upper:'دانگ بالا',f_upperpart:'بخش بالا',
+ type:'',notpure4:'چهارم درست نیست',pure4:'چهارم درست ✓',pure5:'پنجم درست ✓',from4:' سنت فاصله با چهارم درست',from5:' سنت فاصله با پنجم درست',deg58:'(درجه‌های ۵ تا ۸)',
+ vs:'در برابر',deg:'درجه‌ی',identical:'نت‌ها یکسان‌اند',compare:'مقایسه: ',
+ th:['درجه','نت','سنت از نت پایه','فاصله‌ی ورودی','هرتز','فاصله تا کلید پیانو'],between:'بین کلیدها',near:'≈ روی کلید پیانو (کمتر از ۱۰ سنت)',
+ echo_listen:'جمله‌ی {n} از ۸ · <span class="muted">گوش دهید…</span>',echo_turn:'جمله‌ی {n} از ۸ · <span class="turn live">نوبت شماست — آن را بنوازید</span> <span class="muted">(پاسخ: <bdi dir="ltr">{a}</bdi>)</span>',echo_done:'تمرین پژواک تمام شد — ۸ جمله. دوباره اجرا کنید یا گام را عوض کنید.',
+ iv_h2:'همه‌ی گام‌های اینجا از پنج اندازه‌ی فاصله ساخته می‌شوند',
+ iv_p:'نظریه‌ی غربی فقط دو فاصله را نام می‌برد — پرده (T) و نیم‌پرده (B). نظریه‌ی ایرانی فاصله‌ی میانه‌ی <b>J</b> (مجنب) را می‌افزاید، همان که در کُرُن می‌شنوید، و مکمل آن <b>S</b> را. این پنج فاصله را بشناسید تا هر گام در کاوشگر مانند جمله‌ای خوانا شود. حروف مطابق نرم‌افزار نوسا است.',
+ play:'پخش',vsT:'در برابر T',qt:'۲۴ قسمتی: {n} ربع‌پرده',
+ cents_h2:'چرا سنت؟',cents_p:'درک زیر و بمی لگاریتمی است: هر اکتاو فرکانس را دو برابر می‌کند. سنت نسبت‌ها را به عددهای جمع‌پذیر تبدیل می‌کند — ۱۲۰۰ در هر اکتاو — پس هر گام فهرستی از اندازه‌ی فواصل است که جمعشان ۱۲۰۰ می‌شود.',
+ playboth:'پخش هر دو',result:'نتیجه',calc:'{c} سنت · ضربان {b} در ثانیه · نزدیک‌ترین فاصله {k}',
+ beats_note:'نکته‌ی کوک سه‌تار: وقتی دو صدا نزدیک به هم‌اند، ضربان‌هایی با بسامد |f₁ − f₂| در ثانیه می‌شنوید. نتی را همراه واخوان بزنید و آن‌قدر تنظیم کنید تا ضربان از بین برود.',
+ mm_h2:'ماژور و مینور، به زبان فاصله‌ها',
+ mm_p:'گامی هفت‌فاصله‌ای به‌طور طبیعی به دو <b>دانگ</b> (چهار نت در فاصله‌ی چهارم درست، ۴۹۸ سنت) تقسیم می‌شود که با یک پرده به هم وصل‌اند. با تغییر فواصل کوچکی که چهارم را پر می‌کنند، مُد عوض می‌شود.',
+ play_major:'پخش ماژور',play_minor:'پخش مینور طبیعی',play_shur:'پخش شور',
+ mm_note:'دقت کنید: مینور طبیعی و شور در همه‌ی نت‌ها جز درجه‌ی دوم مشترک‌اند؛ شور آن را حدود ۵۷ سنت پایین می‌آورد و کُرُن می‌کند.',
+ ear_h2:'تربیت شنوایی',ear_p:'هر سؤال خودکار پخش می‌شود. هر چند بار که خواستید دوباره گوش دهید — هدف شناختن است، نه سرعت.',
+ level:'سطح',playas:'نحوه‌ی پخش',mel:'ملودیک (پشت سر هم)',harm:'ملودیک، سپس همزمان',
+ replay:'↻ پخش دوباره',hear:'شنیدن گزینه‌ها',next:'سؤال بعدی',
+ fb_ok:'درست است.',fb_no:'نه کاملاً — پاسخ «{x}» بود. دوباره گوش دهید.',
+ sc_all:'کل',sc_20:'۲۰ تای آخر',sc_ready:' · آماده‌ی سطح بعد',sc_streak:'پیاپی درست',sc_best:'بهترین',on:'روی',
+ daily_h2:'روزانه ۲۰ دقیقه',
+ r1t:'۰ تا ۳ دقیقه · کوک',r1:'کاوشگر ← واخوان روشن. نت پایه را روی سه‌تار همراه واخوان بزنید تا ضربان از بین برود. سپس پنجم را.',
+ r2t:'۳ تا ۸ دقیقه · پیمودن گام',r2:'گام مرحله‌ی فعلی را همراه برنامه بالا و پایین بزنید، سپس به‌تنهایی. یک بار هم آن را با شماره‌ی درجه‌ها بخوانید.',
+ r3t:'۸ تا ۱۵ دقیقه · تمرین گوش',r3:'تمرین مرحله‌ی خود را در بخش تربیت شنوایی انجام دهید. پس از ۲۰ سؤال بایستید و امتیاز را یادداشت کنید.',
+ r4t:'۱۵ تا ۲۰ دقیقه · پژواک',r4:'تمرین پژواک: برنامه یک جمله‌ی چهارنتی می‌زند و شما در سکوتِ بعد آن را روی سه‌تار پاسخ می‌دهید. پاسخ پس از هر جمله نشان داده می‌شود.',
+ fb_signin:'بازخورد از طریق نظرهای claude.ai ثبت می‌شود — برای نوشتن آن وارد claude.ai شوید.',fb_open:'یادداشت خود را در کادر نظر بنویسید و ارسال کنید.',fb_gh:'گیت‌هاب در زبانه‌ی تازه باز شد — برای ارسال، یک حساب رایگان گیت‌هاب لازم است.',
+ path_h2:'مسیر',path_p:'وقتی دو روز پشت سر هم در ۲۰ سؤال ۸۵٪ یا بیشتر گرفتید، به مرحله‌ی بعد بروید. تیک‌ها در همین مرورگر ذخیره می‌شوند.'
+}};
+const L2=(en,fa)=>S.lang==='fa'?fa:en;               // pick one of a pair
+const tx=(k,vars)=>{let s=(TX[S.lang]&&TX[S.lang][k]!=null)?TX[S.lang][k]:TX.en[k];if(vars&&typeof s==='string')for(const [a,b] of Object.entries(vars))s=s.split('{'+a+'}').join(b);return s};
+
+/* ---------- theory model ---------- */
+const lg=x=>1200*Math.log2(x);
+const TUN={
+  pyth:{T:lg(9/8),B:lg(256/243),J:lg(32/27)/2,S:2*lg(9/8)-lg(32/27)/2,H:lg(19683/16384),
+        nat:[0,lg(9/8),lg(81/64),lg(4/3),lg(3/2),lg(27/16),lg(243/128)],flat:lg(2187/2048)},
+  q:{T:200,B:100,J:150,S:250,H:300,nat:[0,200,400,500,700,900,1100],flat:100}
+};
+const IVINFO={
+  T:{name:'Tanini',fa:'طنینی',en:'whole tone',enFa:'پرده',ratio:'9 : 8',q:200},
+  B:{name:'Baqiyye',fa:'بقیه',en:'small half step (limma)',enFa:'نیم‌پرده‌ی کوچک (لیما)',ratio:'256 : 243',q:100},
+  J:{name:'Mojannab',fa:'مجنب',en:'neutral step — the koron sound',enFa:'فاصله‌ی میانه — صدای کُرُن',ratio:'√(32 : 27)',q:150},
+  S:{name:'Large step',fa:'فاصله‌ی بزرگ',en:'T + (T − J)',enFa:'T + (T − J)',ratio:'2T − J',q:250},
+  H:{name:'Augmented 2nd',fa:'دوم افزوده',en:'T + apotome',enFa:'T + آپوتوم',ratio:'19683 : 16384',q:300}
+};
+const ivName=k=>L2(IVINFO[k].name,IVINFO[k].fa);
+/* src: 'nosa' = pattern taken from the Nosa ScalesTest app; 'lab' = standard Western theory added here */
+const MODES=[
+ {id:'major',g:'Western',src:'nosa',name:'Major',fa:'ماژور',pat:'TTBTTTB',
+  desc:'The Western major scale: a T T B tetrachord, a whole tone, then the same tetrachord again. In the Persian system the same pattern appears as Mahur. (Nosa lists it as “Major mode, Western classical”.)',
+  descFa:'گام ماژور غربی: دانگ T T B، یک پرده، و دوباره همان دانگ. در موسیقی ایرانی همین الگو در ماهور دیده می‌شود. (در نوسا با نام «مد ماژور (کلاسیک غربی)» آمده است.)'},
+ {id:'minor',g:'Western',src:'lab',name:'Natural minor',fa:'مینور طبیعی',pat:'TBTTBTT',
+  desc:'Natural (Aeolian) minor. Compare it with Shur: the two share every note except degree 2.',
+  descFa:'مینور طبیعی (ائولین). آن را با شور مقایسه کنید: همه‌ی نت‌ها جز درجه‌ی دوم یکسان‌اند.'},
+ {id:'hminor',g:'Western',src:'lab',name:'Harmonic minor',fa:'مینور هارمونیک',pat:'TBTTBHB',
+  desc:'Natural minor with a raised 7th, creating an augmented second (H) between degrees 6 and 7 — the Western ear\'s idea of an "eastern" sound. Compare its B H B with the J S B of Chahargah and Homayoun.',
+  descFa:'مینور طبیعی با درجه‌ی هفتمِ بالابرده، که میان درجه‌های ۶ و ۷ یک دوم افزوده (H) می‌سازد — همان صدایی که گوش غربی «شرقی» می‌شنود. B H B آن را با J S B چهارگاه و همایون مقایسه کنید.'},
+ {id:'shur',g:'Dastgah',src:'nosa',name:'Shur',fa:'شور',pat:'JJTTBTT',
+  desc:'Often called the mother of the dastgahs: Abu Ata, Bayat-e Tork, Afshari and Dashti are traditionally grouped under it. Its lower tetrachord J J T puts a koron on degree 2.',
+  descFa:'اغلب «مادر دستگاه‌ها» خوانده می‌شود: ابوعطا، بیات ترک، افشاری و دشتی به‌طور سنتی زیرمجموعه‌ی آن‌اند. دانگ پایینی J J T درجه‌ی دوم را کُرُن می‌کند.'},
+ {id:'segah',g:'Dastgah',src:'nosa',name:'Segah',fa:'سه‌گاه',pat:'JTJJTTJ',
+  desc:'Built largely from neutral steps. In practice its tonic is usually itself a koron note (e.g. Mi-koron); here it starts on the selected tonic so you can compare shapes.',
+  descFa:'بیشتر از فواصل مجنب ساخته شده است. در اجرا، نت پایه‌ی آن معمولاً خود یک نت کُرُن است (مثلاً می کُرُن)؛ اینجا برای مقایسه‌ی شکل‌ها از نت پایه‌ی انتخابی شروع می‌شود.'},
+ {id:'chahargah',g:'Dastgah',src:'nosa',name:'Chahargah',fa:'چهارگاه',pat:'JSBTJSB',
+  desc:'Two identical J S B tetrachords joined by a whole tone — a bright, assertive mode. The S step gives its middle a stretched, "open" sound.',
+  descFa:'دو دانگ یکسان J S B که با یک پرده به هم وصل شده‌اند — مُدی درخشان و استوار. فاصله‌ی S به میانه‌ی آن حالتی کشیده و «باز» می‌دهد.'},
+ {id:'homayoun',g:'Dastgah',src:'nosa',name:'Homayoun',fa:'همایون',pat:'JSBTBTT',
+  desc:'Lower tetrachord J S B like Chahargah; upper part like minor. Bayat-e Esfahan is traditionally grouped with Homayoun.',
+  descFa:'دانگ پایینی J S B مانند چهارگاه؛ بخش بالایی نزدیک به مینور. بیات اصفهان به‌طور سنتی با همایون گروه‌بندی می‌شود.'},
+ {id:'mahur',g:'Dastgah',src:'nosa',name:'Mahur',fa:'ماهور',pat:'TTBTTTB',
+  desc:'Same step pattern as the Western major scale. Its colour in performance comes from the gushehs, which bring in korons the plain scale does not show.',
+  descFa:'همان الگوی فاصله‌ای گام ماژور غربی. رنگ آن در اجرا از گوشه‌ها می‌آید که کُرُن‌هایی می‌آورند که گام ساده نشان نمی‌دهد.'},
+ {id:'rast',g:'Dastgah',src:'nosa',name:'Rast-Panjgah',fa:'راست',pat:'TJJTTJJ',
+  desc:'Shown with the pattern the Nosa app lists as “Rast”: T J J, a whole tone, then T J J.',
+  descFa:'با الگویی که نرم‌افزار نوسا با نام «راست» آورده است: T J J، یک پرده، و دوباره T J J.'},
+ {id:'afshari',g:'Avaz & gusheh',src:'nosa',name:'Araq (Afshari)',fa:'عراق افشاری',pat:'TBTTTJJ',
+  desc:'Listed in the Nosa app as “Araq Afshari” — from the Shur family.',
+  descFa:'در نرم‌افزار نوسا با نام «عراق افشاری» آمده است — از خانواده‌ی شور.'},
+ {id:'mokhalef',g:'Avaz & gusheh',src:'nosa',name:'Mokhalef (Segah)',fa:'مخالف سه‌گاه',pat:'TBTTJTJ',
+  desc:'Mokhalef, the high climactic gusheh of Segah.',
+  descFa:'مخالف، گوشه‌ی اوجِ سه‌گاه.'},
+ {id:'araq',g:'Avaz & gusheh',src:'nosa',name:'Araq (Mahur)',fa:'عراق ماهور',pat:'TBTTTTB',
+  desc:'Araq as a gusheh of Mahur, as listed in the Nosa app.',
+  descFa:'عراق به‌عنوان گوشه‌ای از ماهور، مطابق نرم‌افزار نوسا.'},
+ {id:'saba',g:'Avaz & gusheh',src:'nosa',name:'Saba (Persian intervals)',fa:'صبا (فواصل ایرانی)',pat:'TJJJSBT',
+  desc:'Saba with Persian step sizes. Compare with the Arabic-interval version, where an augmented second replaces the J S pair.',
+  descFa:'صبا با فواصل ایرانی. آن را با نسخه‌ی فواصل عربی مقایسه کنید که در آن یک دوم افزوده جای جفت J S را می‌گیرد.'},
+ {id:'sabaAr',g:'Avaz & gusheh',src:'nosa',name:'Saba (Arabic intervals)',fa:'صبا (فواصل عربی)',pat:'TJJBHBT',
+  desc:'The same maqam shape with Arabic intervals: note the B H B cluster.',
+  descFa:'همان شکل مقام با فواصل عربی: به خوشه‌ی B H B توجه کنید.'}
+];
+const M=Object.fromEntries(MODES.map(m=>[m.id,m]));
+const mName=m=>L2(m.name,m.fa), mAlt=m=>L2(m.fa,m.name);
+const GENUS={TTB:['major / Mahur','ماژور / ماهور'],TBT:['minor (Dorian)','مینور (دورین)'],BTT:['Phrygian','فریژین'],JJT:['Shur','شور'],JTJ:['Segah','سه‌گاه'],TJJ:['Rast','راست'],JSB:['Chahargah','چهارگاه'],BHB:['Hijaz / harmonic','حجاز / هارمونیک']};
+const gName=g=>GENUS[g]?L2(...GENUS[g]):'—';
+const TONICS=[[0,0],[1,0],[2,-1],[2,0],[3,0],[4,0],[5,0],[6,-1]];
+const LET_EN=['Do','Re','Mi','Fa','Sol','La','Si'],LET_FA=['دو','ر','می','فا','سل','لا','سی'];
+const LET=()=>S.lang==='fa'?LET_FA:LET_EN;
+const tonicName=i=>LET()[TONICS[i][0]]+(TONICS[i][1]<0?'♭':'');
+const PC12=[[0,''],[0,'♯'],[1,''],[2,'♭'],[2,''],[3,''],[3,'♯'],[4,''],[5,'♭'],[5,''],[6,'♭'],[6,'']];
+
+const S={mode:'shur',cmp:'minor',tonic:0,tuning:'pyth',timbre:'pluck',bpm:84,drone:false,vol:.8,lang:'en',...store.get('settings',{})};
+if(!['pluck','sine'].includes(S.timbre))S.timbre='pluck'; // settings saved by the tar/setar version
+S.drone=false;if(typeof S.tonic!=='number'||!TONICS[S.tonic])S.tonic=0;
+const tun=()=>TUN[S.tuning];
+const degs=pat=>{let c=0;const o=[0];for(const k of pat){c+=tun()[k];o.push(c)}return o};
+const tonicCents=(ti=S.tonic)=>{const [l,a]=TONICS[ti];return tun().nat[l]+a*tun().flat};
+const tonicFreq=(ti=S.tonic)=>{let f=261.63*Math.pow(2,tonicCents(ti)/1200);return f>370?f/2:f};
+
+const KORON='<svg class="acc" width="8" height="14" viewBox="0 0 8 14" aria-label="koron"><title>koron</title><path d="M1.5 0.5V13.5M1.5 7.5L7 10.5L1.5 13.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+const SORI='<svg class="acc" width="9" height="14" viewBox="0 0 9 14" aria-label="sori"><title>sori</title><path d="M4.5 0.5V13.5M1 6L8 4M1 10L8 8M4.5 0.5L7.5 3" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+/* note spelling: letter from degree, accidental from the cent deviation vs the natural note */
+function spell(i,cents,ti=S.tonic){
+  const [l]=TONICS[ti];const k=l+i, letter=k%7, oct=Math.floor(k/7);
+  const d=tonicCents(ti)+cents-(tun().nat[letter]+1200*oct);
+  const kor=L2(' koron',' کُرُن'),sor=L2(' sori',' سُری');
+  let acc='',txt='',sh='';
+  if(d<-170){acc=txt=sh='♭♭'} else if(d<-80){acc=txt=sh='♭'} else if(d<-25){acc=KORON;txt=kor;sh='k'}
+  else if(d>150){acc=txt=sh='♯♯'} else if(d>80){acc=txt=sh='♯'} else if(d>25){acc=SORI;txt=sor;sh='s'}
+  const n=LET()[letter];
+  const semi={'♭♭':-2,'♭':-1,'♯':1,'♯♯':2}[sh]||0; // korons/sori are measured from the plain letter
+  return {html:`<bdi>${n}${acc}</bdi>`,txt:n+txt,name:n,sh,ref:100*([0,2,4,5,7,9,11][letter]+semi+12*oct),key:n+(semi<0?'♭'.repeat(-semi):'♯'.repeat(semi))};
+}
+/* ---------- audio ---------- */
+/* Live Web Audio when the browser lets the AudioContext run; otherwise every sound is
+   rendered offline (OfflineAudioContext → WAV) and played through an <audio> element. */
+let ctx=null,master=null,droneNodes=null,droneEl=null,mode='unknown';
+function ac(){
+  if(!ctx){
+    try{ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=S.vol;
+      const comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;master.connect(comp).connect(ctx.destination);}
+    catch(e){ctx=null}
+  }
+  return ctx;
+}
+async function ensureAudio(){
+  const c=ac();
+  if(c&&c.state!=='running'){
+    try{await Promise.race([c.resume(),new Promise(r=>setTimeout(r,500))])}catch(e){}
+    if(c.state!=='running'){ // WebKit unlock trick: start a silent buffer inside the gesture
+      try{const s=c.createBufferSource();s.buffer=c.createBuffer(1,1,22050);s.connect(c.destination);s.start(0);await new Promise(r=>setTimeout(r,120))}catch(e){}
+    }
+  }
+  mode=c&&c.state==='running'?'live':'file';setStatus();return mode==='live';
+}
+function setStatus(){
+  const el=$('#aStat');if(!el)return;
+  el.textContent=tx('st_'+mode);
+  el.dataset.s=mode;
+}
+['pointerdown','keydown','touchend'].forEach(ev=>document.addEventListener(ev,()=>{const c=ac();if(c&&c.state!=='running')c.resume().then(()=>{mode=c.state==='running'?'live':mode;setStatus()}).catch(()=>{})},{capture:true}));
+const ksCache=new Map();
+function ksBuffer(c){ // one Karplus-Strong string at a fixed base; exact pitch set by playbackRate
+  const sr=c.sampleRate,N=Math.round(sr/220);if(ksCache.has(sr))return ksCache.get(sr);
+  const len=Math.floor(sr*2.2),buf=c.createBuffer(1,len,sr),y=buf.getChannelData(0);
+  let prev=0;for(let i=0;i<N;i++){const r=Math.random()*2-1;prev=.6*r+.4*prev;y[i]=prev}
+  y[N]=.997*y[0];for(let i=N+1;i<len;i++)y[i]=.4985*(y[i-N]+y[i-N-1]); // y[-1] would be undefined → NaN → silence
+  let m=1e-9;for(let i=0;i<len;i++)m=Math.max(m,Math.abs(y[i]));for(let i=0;i<len;i++)y[i]/=m;
+  const out={buf,f0:sr/(N+.5)};ksCache.set(sr,out);return out;
+}
+function note(c,f,t,dur,dest,gain=.5){
+  if(S.timbre==='pluck'){
+    const {buf,f0}=ksBuffer(c);
+    [[1,gain],[1.0012,gain*.45]].forEach(([det,g])=>{ // doubled course, like setar
+      const s=c.createBufferSource();s.buffer=buf;s.playbackRate.value=f/f0*det;
+      const v=c.createGain();v.gain.setValueAtTime(g,t);v.gain.setTargetAtTime(0,t+Math.max(dur,.25)*1.3,.12);
+      s.connect(v).connect(dest);s.start(t);s.stop(t+Math.max(dur,.25)*1.3+.8);
+    });
+  }else{
+    const o=c.createOscillator();o.type='sine';o.frequency.value=f;const v=c.createGain();
+    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(gain*.7,t+.02);v.gain.setValueAtTime(gain*.7,t+dur*.85);v.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(v).connect(dest);o.start(t);o.stop(t+dur+.05);
+  }
+}
+function wavURL(buf){
+  const d=buf.getChannelData(0),n=d.length,sr=buf.sampleRate,ab=new ArrayBuffer(44+n*2),v=new DataView(ab);
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]));v.setInt16(44+i*2,s*32767,true)}
+  return URL.createObjectURL(new Blob([ab],{type:'audio/wav'}));
+}
+async function render(seconds,build){
+  const sr=44100,oc=new OfflineAudioContext(1,Math.ceil(sr*seconds),sr);
+  const out=oc.createGain();out.gain.value=S.vol*.9;out.connect(oc.destination);build(oc,out);
+  return wavURL(await oc.startRendering());
+}
+let seq=null,playTok=0;
+function stopAll(keepDrone){
+  playTok++;
+  if(seq){seq.stop();seq.timers.forEach(clearTimeout);seq=null}
+  echoRun=null;$('#echoStatus').textContent='';
+  $$('.hot').forEach(e=>e.classList.remove('hot'));
+  if(!keepDrone)setDrone(false);
+}
+/* events: [{f, at (beats), d (beats), ui}] */
+function play(events,{onEnd}={}){
+  stopAll(true);const tok=playTok;
+  const beat=60/S.bpm;let end=0;events.forEach(e=>end=Math.max(end,e.at+(e.d||1)));
+  const put=(c,dest,t0)=>events.forEach(e=>{if(e.f)(Array.isArray(e.f)?e.f:[e.f]).forEach(f=>note(c,f,t0+e.at*beat,(e.d||1)*beat*.95,dest,Array.isArray(e.f)?.35:.5))});
+  const arm=(startIn,stopFn)=>{ // UI timers relative to audio start
+    const timers=[];events.forEach(e=>{if(e.ui)timers.push(setTimeout(()=>e.ui(),(startIn+e.at*beat)*1000))});
+    timers.push(setTimeout(()=>{$$('.hot').forEach(x=>x.classList.remove('hot'));seq=null;onEnd&&onEnd()},(startIn+end*beat)*1000+150));
+    seq={stop:stopFn,timers};
+  };
+  ensureAudio().then(async live=>{
+    if(tok!==playTok)return;
+    if(live){const bus=ctx.createGain();bus.connect(master);put(ctx,bus,ctx.currentTime+.08);arm(.08,()=>bus.disconnect());return}
+    const url=await render(end*beat+1.6,(oc,out)=>put(oc,out,.05));if(tok!==playTok)return;
+    const a=new Audio(url);arm(.05,()=>{a.pause();URL.revokeObjectURL(url)});
+    a.play().catch(()=>{mode='blocked';setStatus()});
+  });
+}
+function setDrone(on){
+  S.drone=on;const b=$('#pDrone');if(b){b.textContent=tx(on?'drone_on':'drone_off');b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)}
+  if(droneNodes){const {g,oscs}=droneNodes;g.gain.setTargetAtTime(0,ctx.currentTime,.08);oscs.forEach(o=>o.stop(ctx.currentTime+.5));droneNodes=null}
+  if(droneEl){droneEl.pause();droneEl=null}
+  if(!on)return;
+  const f=tonicFreq()/2,fifth=1.5; // drone uses a pure 3:2 fifth in both tunings
+  const build=(c,dest,loopSafe)=>{
+    const g=c.createGain();g.gain.value=loopSafe?.09:0;if(!loopSafe)g.gain.setTargetAtTime(.09,c.currentTime,.3);
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;lp.connect(g).connect(dest);
+    const parts=loopSafe?[[f,1],[f*fifth,.45],[f/2,.5]]:[[f,1],[f*1.003,.6],[f*fifth,.45],[f/2,.5]];
+    const oscs=parts.map(([fr,a])=>{const o=c.createOscillator();o.type='sawtooth';o.frequency.value=fr;const v=c.createGain();v.gain.value=a;o.connect(v).connect(lp);o.start();return o});
+    return {g,oscs};
+  };
+  ensureAudio().then(async live=>{
+    if(!S.drone)return;
+    if(live){droneNodes=build(ctx,master,false);return}
+    const secs=Math.round(4*f/2)/(f/2); // whole number of periods → seamless loop
+    const url=await render(secs,(oc,out)=>build(oc,out,true));if(!S.drone)return;
+    droneEl=new Audio(url);droneEl.loop=true;droneEl.play().catch(()=>{mode='blocked';setStatus()});
+  });
+}
+function testSound(){play([{f:440,at:0,d:1},{f:660,at:1,d:1.5}])}
+
+/* ---------- explorer ---------- */
+function fillSelects(){
+  const opt=(sel,withNone)=>{const v=sel.value;sel.innerHTML=(withNone?`<option value="">${tx('none')}</option>`:'')+['Western','Dastgah','Avaz & gusheh'].map(g=>`<optgroup label="${tx('g_'+g)}">`+MODES.filter(m=>m.g===g).map(m=>`<option value="${m.id}">${mName(m)}</option>`).join('')+'</optgroup>').join('')};
+  opt($('#mode'));opt($('#cmp'),true);
+  $('#tonic').innerHTML=TONICS.map((t,i)=>`<option value="${i}">${tonicName(i)}</option>`).join('');
+  $('#mode').value=S.mode;$('#cmp').value=S.cmp;$('#tonic').value=S.tonic;$('#tuning').value=S.tuning;$('#timbre').value=S.timbre;$('#bpm').value=S.bpm;$('#bpmv').textContent=S.bpm;$('#vol').value=S.vol;
+}
+const chips=pat=>{let h='';[...pat].forEach((k,i)=>{h+=`<span class="chip" style="--c:var(--${k})">${k}</span>`;if(i===2||i===3)h+='<span class="chip sep">|</span>'});return h};
+function rulerHTML(mode,label,idp){
+  const d=degs(mode.pat);
+  const segs=[...mode.pat].map((k,i)=>`<div class="seg" style="--c:var(--${k});flex-grow:${tun()[k]}" data-seg="${i}" data-m="${mode.id}" title="${ivName(k)}: ${tun()[k].toFixed(1)}¢"><b>${k}</b><small>${Math.round(tun()[k])}</small></div>`).join('');
+  const ticks=d.map((c,i)=>`<div class="tick" id="${idp}${i}" data-deg="${i}" data-m="${mode.id}" style="left:${c/12}%;top:46px"><span class="nm">${spell(i,c).html}</span><span class="n">${i+1}</span></div>`).join('');
+  return `<div class="ruler"><div class="lab"><span dir="auto">${label}</span><span class="muted">${mode.pat.split('').join(' ')}</span></div><div style="position:relative"><div class="bar">${segs}</div><div class="ticks">${ticks}</div></div></div>`;
+}
+function wheelSVG(m,c){
+  const R=108,pt=(cents,r)=>{const a=cents/1200*2*Math.PI-Math.PI/2;return [r*Math.cos(a),r*Math.sin(a)]};
+  const ff=S.lang==='fa'?'Vazirmatn, Tahoma, sans-serif':'IBM Plex Sans, system-ui, sans-serif';
+  let s=`<svg class="wheel" viewBox="-150 -150 300 300" role="img" aria-label="1200 cents"><circle r="${R}" fill="none" stroke="var(--line)" stroke-width="1.5"/>`;
+  for(let k=0;k<24;k++){const L=k%2?5:11;const [x1,y1]=pt(k*50,R),[x2,y2]=pt(k*50,R-L);s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-opacity="${k%2?.35:.7}" stroke-width="1"/>`}
+  const d=degs(m.pat);
+  [...m.pat].forEach((k,i)=>{const a0=d[i],a1=d[i+1],r=R-26;const [x0,y0]=pt(a0+10,r),[x1,y1]=pt(a1-10,r);s+=`<path d="M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}" fill="none" stroke="var(--${k})" stroke-width="7" stroke-linecap="round" opacity=".8"/>`;const [lx,ly]=pt((a0+a1)/2,r-18);s+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="11" fill="var(--${k})" font-family="IBM Plex Mono, monospace">${k}</text>`});
+  if(c){degs(c.pat).slice(0,7).forEach(cc=>{const [x,y]=pt(cc,R);s+=`<circle cx="${x}" cy="${y}" r="13" fill="none" stroke="var(--S)" stroke-width="2" stroke-dasharray="3 2"/>`})}
+  d.slice(0,7).forEach((cc,i)=>{const [x,y]=pt(cc,R),[tx_,ty]=pt(cc,R+26);const sp=spell(i,cc);
+    const mark=sp.sh==='k'?`<tspan font-size="8" dy="-4">${L2('k','کرن')}</tspan>`:sp.sh==='s'?`<tspan font-size="8" dy="-4">${L2('s','سری')}</tspan>`:sp.sh;
+    s+=`<g class="dot" data-deg="${i}" id="w${i}" tabindex="0" role="button" aria-label="${i+1}"><circle cx="${x}" cy="${y}" r="10" fill="var(--accent)"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="var(--surface)">${i+1}</text></g><text x="${tx_}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="11" fill="var(--ink)" font-family="${ff}">${sp.name}${mark}</text>`});
+  return s+'</svg>';
+}
+function analyze(m){
+  const t=tun(),d=degs(m.pat),out=[];
+  const g=m.pat.slice(0,3),four=d[3],five=d[4],pat=x=>`<bdi dir="ltr">${x.split('').join(' ')}</bdi>`;
+  const sg=v=>(v>0?'+':'')+v.toFixed(0);
+  const p4=Math.abs(four-t.nat[3])<3,p5=Math.abs(five-t.nat[4])<3;
+  out.push([tx('f_lower'),`${pat(g)} → ${p4?gName(g)+(tx('type')?' '+tx('type'):''):tx('notpure4')}`]);
+  out.push([tx('f_deg4'),`<bdi dir="ltr">${four.toFixed(1)}¢</bdi> · ${p4?tx('pure4'):'<bdi dir="ltr">'+sg(four-t.nat[3])+'</bdi>'+tx('from4')}`]);
+  out.push([tx('f_deg5'),`<bdi dir="ltr">${five.toFixed(1)}¢</bdi> · ${p5?tx('pure5'):'<bdi dir="ltr">'+sg(five-t.nat[4])+'</bdi>'+tx('from5')}`]);
+  const up=m.pat.slice(4);
+  if(Math.abs(d[7]-d[4]-t.nat[3])<3)out.push([tx('f_upper'),`${pat(up)} → ${gName(up)}${tx('type')?' '+tx('type'):''}`]);
+  else out.push([tx('f_upperpart'),`${pat(up)} ${tx('deg58')}`]);
+  return out;
+}
+function renderExplore(){
+  const m=M[S.mode],c=S.cmp&&S.cmp!==S.mode?M[S.cmp]:null;
+  $('#mName').textContent=mName(m);$('#mFa').textContent=mAlt(m);$('#mFa').setAttribute('lang',S.lang==='fa'?'en':'fa');
+  $('#mChips').innerHTML=chips(m.pat);$('#mDesc').textContent=L2(m.desc,m.descFa);
+  $('#mSrc').innerHTML=m.src==='nosa'?`<a class="srcbadge" href="${NOSA}" target="_blank" rel="noopener">${tx('src_nosa')}</a>`:`<span class="srcbadge">${tx('src_lab')}</span>`;
+  $('#wheelNote').innerHTML=tx('wheel_note',{m:mName(m)});
+  $('#wheel').innerHTML=wheelSVG(m,c);
+  $('#rulers').innerHTML=rulerHTML(m,mName(m),'r')+(c?rulerHTML(c,tx('compare')+mName(c),'c'):'');
+  const facts=analyze(m);
+  if(c){const a=degs(m.pat),b=degs(c.pat);const diffs=a.map((x,i)=>[i,x-b[i]]).filter(([,v])=>Math.abs(v)>3);
+    facts.push([`${tx('vs')} ${mName(c)}`,diffs.length?diffs.map(([i,v])=>`${tx('deg')} ${i+1}: <bdi dir="ltr">${v>0?'+':''}${v.toFixed(0)}¢</bdi>`).join(' · '):tx('identical')]);}
+  $('#facts').innerHTML=facts.map(([k,v])=>`<div class="fact"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  const d=degs(m.pat),tc=tonicCents();
+  let rows='<tr>'+tx('th').map(h=>`<th>${h}</th>`).join('')+'</tr>';
+  d.forEach((cc,i)=>{const sp=spell(i,cc),dev=tc+cc-sp.ref,big=Math.abs(dev)>30,near=Math.abs(dev)<=10.5;
+    const off=near?`<span class="muted" title="${tx('near')}">≈</span>`:`<bdi dir="ltr" class="${big?'dev-big':''}">${sp.key} ${dev>=0?'+':'−'}${Math.abs(dev).toFixed(0)}¢</bdi>${big?' <span class="muted">· '+tx('between')+'</span>':''}`;
+    rows+=`<tr><td class="num">${i+1}</td><td>${sp.html}</td><td class="num">${cc.toFixed(1)}</td><td>${i?`<span class="chip" style="--c:var(--${m.pat[i-1]})">${m.pat[i-1]}</span>`:''}</td><td class="num">${(tonicFreq()*Math.pow(2,cc/1200)).toFixed(2)}</td><td class="num">${off}</td></tr>`});
+  $('#dtable').innerHTML=rows;
+  if(S.drone)setDrone(true);
+  saveSettings();
+}
+function saveSettings(){store.set('settings',{mode:S.mode,cmp:S.cmp,tonic:S.tonic,tuning:S.tuning,timbre:S.timbre,bpm:S.bpm,vol:S.vol,lang:S.lang})}
+const fq=(c,ti)=>tonicFreq(ti)*Math.pow(2,c/1200);
+const hot=(...ids)=>()=>{$$('.hot').forEach(e=>e.classList.remove('hot'));ids.forEach(id=>{const e=document.getElementById(id);e&&e.classList.add('hot')})};
+function scaleEvents(m,dir,pref='r',start=0){
+  const d=degs(m.pat);let idx=[0,1,2,3,4,5,6,7];if(dir==='down')idx.reverse();if(dir==='both')idx=[0,1,2,3,4,5,6,7,6,5,4,3,2,1,0];
+  return idx.map((i,k)=>({f:fq(d[i]),at:start+k,d:k===idx.length-1?2:1,ui:hot(pref+i,pref==='r'?'w'+(i%7):'')}));
+}
+function playDeg(i,m=M[S.mode],pref='r'){const d=degs(m.pat);play([{f:fq(d[i]),at:0,d:1.5,ui:hot(pref+i,m.id===S.mode?'w'+(i%7):'')}])}
+
+/* echo drill */
+let echoRun=null;
+function echoDrill(){
+  stopAll(true);if(!S.drone)setDrone(true);
+  const m=M[S.mode],d=degs(m.pat),run={round:0};echoRun=run;
+  const next=()=>{
+    if(echoRun!==run)return;if(run.round>=8){$('#echoStatus').innerHTML=tx('echo_done');echoRun=null;return}
+    run.round++;let p=Math.random()<.5?0:Math.floor(Math.random()*5);const ph=[p];
+    for(let k=0;k<3;k++){let s=[-1,1,1,-1,2,-2][Math.floor(Math.random()*6)];p=Math.min(7,Math.max(0,p+s));ph.push(p)}
+    const ev=ph.map((i,k)=>({f:fq(d[i]),at:k,d:k===3?1.5:1}));
+    ev.push({at:4.5,d:5,ui:()=>{if(echoRun!==run)return;$('#echoStatus').innerHTML=tx('echo_turn',{n:run.round,a:ph.map(i=>i+1).join(' – ')})}});
+    play(ev,{onEnd:()=>{echoRun=run;setTimeout(next,300)}});echoRun=run;
+    $('#echoStatus').innerHTML=tx('echo_listen',{n:run.round});
+  };
+  next();
+}
+
+/* ---------- intervals tab ---------- */
+function renderIntervals(){
+  const t=tun();
+  $('#ivgrid').innerHTML=Object.entries(IVINFO).map(([k,v])=>`<div class="iv" style="--c:var(--${k})"><span class="sym">${k}</span><span class="nm">${L2(v.name,v.fa)} <span class="fa">${L2(v.fa,v.name)}</span></span><span class="muted" style="font-size:.85rem">${L2(v.en,v.enFa)}</span><span class="num"><bdi dir="ltr">${t[k].toFixed(1)}¢ · ${S.tuning==='pyth'?v.ratio:''}</bdi>${S.tuning==='pyth'?'':tx('qt',{n:v.q/50})}</span><div class="btnrow" style="margin-top:6px"><button class="btn" data-iv="${k}">${tx('play')}</button><button class="btn" data-ivvs="${k}">${tx('vsT')}</button></div></div>`).join('');
+  $('#mmRulers').innerHTML=rulerHTML(M.major,mName(M.major),'mA')+rulerHTML(M.minor,mName(M.minor),'mB')+rulerHTML(M.shur,mName(M.shur),'mC');
+  calc();
+}
+function playInterval(k,base=tonicFreq(),harm=false){const f2=base*Math.pow(2,tun()[k]/1200);const ev=[{f:base,at:0},{f:f2,at:1,d:1.2}];if(harm)ev.push({f:[base,f2],at:2.6,d:2});play(ev)}
+function calc(){const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0){const c=lg(b/a);let best='T',bd=1e9;for(const k of 'TBJSH'){const dd=Math.abs(tun()[k]-Math.abs(c));if(dd<bd){bd=dd;best=k}}$('#fRes').textContent=tx('calc',{c:c.toFixed(1),b:Math.abs(a-b).toFixed(2),k:best})}}
+
+/* ---------- ear training ---------- */
+const QT={
+  interval:{label:['Step size','اندازه‌ی فاصله'],levels:[['T vs B','T در برابر B'],['T · B · J','T · B · J'],['All five: T B J S H','هر پنج: T B J S H']],prompt:['Which step did you hear?','کدام فاصله را شنیدید؟']},
+  majmin:{label:['Major or minor','ماژور یا مینور'],levels:[['Full scale','گام کامل'],['Short melody','ملودی کوتاه']],prompt:['Major or minor?','ماژور یا مینور؟']},
+  tetra:{label:['Tetrachord (dang)','دانگ'],levels:[['Western: T T B · T B T · B T T','غربی: T T B · T B T · B T T'],['Add Shur J J T & Chahargah J S B','به‌علاوه‌ی شور J J T و چهارگاه J S B'],['All seven genera','هر هفت نوع']],prompt:['Which tetrachord filled the fourth?','کدام دانگ فاصله‌ی چهارم را پر کرد؟']},
+  dastgah:{label:['Which mode?','کدام گام؟'],levels:[['Minor · Shur · Major','مینور · شور · ماژور'],['Shur · Chahargah · Homayoun · Mahur','شور · چهارگاه · همایون · ماهور'],['Add Segah · Rast','به‌علاوه‌ی سه‌گاه · راست']],prompt:['Which mode is this?','این کدام گام است؟']},
+  degree:{label:['Degree over drone','درجه روی واخوان'],levels:[['Degrees 1–5','درجه‌های ۱ تا ۵'],['Degrees 1–8','درجه‌های ۱ تا ۸']],prompt:['Which degree of the current explorer mode? (drone = tonic)','کدام درجه از گام فعلی کاوشگر؟ (واخوان = نت پایه)']}
+};
+let Q={type:store.get('qtype','interval'),level:0,cur:null,answered:false};
+if(!QT[Q.type])Q.type='interval';
+const stats=store.get('stats',{});
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function baseF(){return 196*Math.pow(2,Math.random()*0.75)}
+function genQ(){
+  const L=Q.level,t=tun();
+  if(Q.type==='interval'){const pool=[['T','B'],['T','B','J'],['T','B','J','S','H']][L];const k=rnd(pool),b=baseF();
+    return {answers:pool,correct:k,label:x=>`${x} · ${ivName(x)}`,play:()=>playInterval(k,b,$('#qhow').value==='harm'),ref:()=>play(pool.flatMap((x,i)=>[{f:b,at:i*3},{f:b*Math.pow(2,t[x]/1200),at:i*3+1,d:1.4}]))}}
+  if(Q.type==='majmin'){const k=rnd(['major','minor']),ti=Math.floor(Math.random()*TONICS.length);const d=degs(M[k].pat);
+    let seq=[0,1,2,3,4,5,6,7];if(L===1){seq=[0];let p=0;for(let i=0;i<6;i++){p=Math.min(5,Math.max(0,p+rnd([-1,1,1,2,-2])));seq.push(p)}seq.push(2,1,0)}
+    const ev=seq.map((i,n)=>({f:fq(d[i],ti),at:n*.8,d:.8}));
+    return {answers:['major','minor'],correct:k,label:x=>mName(M[x]),play:()=>play(ev),ref:()=>play([...scaleEvents(M.major,'up','x',0),...scaleEvents(M.minor,'up','x',9)])}}
+  if(Q.type==='tetra'){const pool=[['TTB','TBT','BTT'],['TTB','TBT','BTT','JJT','JSB'],['TTB','TBT','BTT','JJT','JSB','TJJ','JTJ']][L];const k=rnd(pool),b=baseF();
+    const mk=(g,st,bb)=>{let c=0;const o=[{f:bb,at:st}];[...g].forEach((x,i)=>{c+=t[x];o.push({f:bb*Math.pow(2,c/1200),at:st+i+1,d:i===2?1.5:1})});return o};
+    return {answers:pool,correct:k,label:x=>`<bdi dir="ltr">${x.split('').join(' ')}</bdi> · ${gName(x)}`,play:()=>play(mk(k,0,b)),ref:()=>play(pool.flatMap((g,i)=>mk(g,i*5.5,b)))}}
+  if(Q.type==='dastgah'){const pool=[['minor','shur','major'],['shur','chahargah','homayoun','mahur'],['shur','chahargah','homayoun','mahur','segah','rast']][L];const k=rnd(pool);const d=degs(M[k].pat);
+    const ev=[0,1,2,3,4,5,6,7,6,5,4,3,2,1,0].map((i,n)=>({f:fq(d[i]),at:n*.75,d:n===14?1.6:.75}));
+    return {answers:pool,correct:k,label:x=>mName(M[x]),play:()=>{setDrone(true);play(ev)},ref:()=>{setDrone(true);play(pool.flatMap((x,j)=>scaleEvents(M[x],'up','x',j*9.5)))}}}
+  if(Q.type==='degree'){const m=M[S.mode],d=degs(m.pat),n=L?8:5,k=Math.floor(Math.random()*n);
+    return {answers:[...Array(n).keys()].map(String),correct:String(k),label:x=>`${+x+1} · ${spell(+x,d[+x]).txt}`,play:()=>{setDrone(true);play([{f:fq(d[k]),at:0,d:2}])},ref:()=>{setDrone(true);play(scaleEvents(m,'up','x',0).slice(0,n))}}}
+}
+function renderQTypes(){
+  $('#qtypes').innerHTML=Object.entries(QT).map(([k,v])=>`<button class="btn ${k===Q.type?'on':''}" data-qt="${k}">${L2(...v.label)}</button>`).join('');
+  $('#qlevel').innerHTML=QT[Q.type].levels.map((l,i)=>`<option value="${i}">${i+1} · ${L2(...l)}</option>`).join('');
+  Q.level=Math.min(store.get('lvl-'+Q.type,0),QT[Q.type].levels.length-1);$('#qlevel').value=Q.level;
+  $('#qhow').closest('.field').hidden=Q.type!=='interval';
+}
+function qPrompt(){return L2(...QT[Q.type].prompt)+(Q.type==='degree'?` — ${mName(M[S.mode])}, ${tx('on')} ${tonicName(S.tonic)}`:'')}
+function renderQAnswers(){ // re-label the current question (used on language switch too)
+  if(!Q.cur)return;$('#qprompt').textContent=qPrompt();
+  $('#qans').innerHTML=Q.cur.answers.map(a=>`<button class="btn" data-a="${a}">${Q.cur.label(a)}</button>`).join('');
+  if(Q.answered&&Q.last){const b=$(`#qans [data-a="${Q.last}"]`);b&&b.classList.add(Q.last===Q.cur.correct?'right':'wrong');$(`#qans [data-a="${Q.cur.correct}"]`).classList.add('right');showFb()}
+}
+function newQ(autoplay=true){
+  Q.cur=genQ();Q.answered=false;Q.last=null;$('#qfb').textContent='';$('#qfb').className='fb';
+  renderQAnswers();renderScore();if(autoplay)Q.cur.play();
+}
+function key(){return Q.type+':'+Q.level}
+function renderScore(){const s=stats[key()]||{r:0,n:0,streak:0,best:0,last:[]};const last=s.last.slice(-20);const pct=last.length?Math.round(100*last.filter(Boolean).length/last.length):0;
+  $('#qscore').innerHTML=`<span>${tx('sc_all')} <b><bdi dir="ltr">${s.r}/${s.n}</bdi></b></span><span>${tx('sc_20')} <b>${last.length?pct+'%':'—'}</b>${last.length>=20&&pct>=85?tx('sc_ready'):''}</span><span>${tx('sc_streak')} <b>${s.streak}</b> (${tx('sc_best')} ${s.best})</span>`}
+function showFb(){const ok=Q.last===Q.cur.correct;$('#qfb').innerHTML=ok?tx('fb_ok'):tx('fb_no',{x:Q.cur.label(Q.cur.correct)});$('#qfb').className='fb '+(ok?'good':'bad')}
+function answer(a,btn){
+  if(Q.answered)return;Q.answered=true;Q.last=a;const ok=a===Q.cur.correct;
+  const s=stats[key()]||(stats[key()]={r:0,n:0,streak:0,best:0,last:[]});s.n++;if(ok){s.r++;s.streak++;s.best=Math.max(s.best,s.streak)}else s.streak=0;s.last.push(ok?1:0);s.last=s.last.slice(-40);store.set('stats',stats);
+  btn.classList.add(ok?'right':'wrong');if(!ok)$(`#qans [data-a="${Q.cur.correct}"]`).classList.add('right');
+  showFb();renderScore();
+}
+
+/* ---------- plan ---------- */
+const STAGES=[
+ [['Whole and half steps','پرده و نیم‌پرده'],['Hear T vs B; the major scale as T T B · T · T T B.','T و B را از هم تشخیص دهید؛ گام ماژور به صورت T T B · T · T T B.'],
+  [['Ear training → Step size, level 1','تربیت شنوایی ← اندازه‌ی فاصله، سطح ۱'],['Explorer: Major, drone on, up & down','کاوشگر: ماژور، واخوان روشن، بالا و پایین'],['Sing major on degree numbers','ماژور را با شماره‌ی درجه‌ها بخوانید']]],
+ [['Major vs minor','ماژور در برابر مینور'],['Minor lowers degrees 3, 6, 7. Learn the three Western tetrachords.','مینور درجه‌های ۳، ۶ و ۷ را پایین می‌آورد. سه دانگ غربی را بیاموزید.'],
+  [['Ear training → Major or minor (both levels)','تربیت شنوایی ← ماژور یا مینور (هر دو سطح)'],['Ear training → Tetrachord level 1','تربیت شنوایی ← دانگ، سطح ۱'],['Explorer: Major compared with Natural minor','کاوشگر: ماژور در مقایسه با مینور طبیعی']]],
+ [['The koron step J','فاصله‌ی کُرُن: J'],['The neutral step between B and T. Shur = natural minor with a koron 2nd.','فاصله‌ی میانه، بین B و T. شور = مینور طبیعی با درجه‌ی دوم کُرُن.'],
+  [['Ear training → Step size level 2','تربیت شنوایی ← اندازه‌ی فاصله، سطح ۲'],['Explorer: Shur compared with Natural minor — play one then the other','کاوشگر: شور در مقایسه با مینور طبیعی — یکی پس از دیگری'],['Echo drill in Shur','تمرین پژواک در شور']]],
+ [['Shur and its family','شور و خانواده‌اش'],['Shur\'s J J T tetrachord; Araq (Afshari) and its J J ending.','دانگ J J T شور؛ عراق افشاری و پایان J J آن.'],
+  [['Ear training → Tetrachord level 2','تربیت شنوایی ← دانگ، سطح ۲'],['Ear training → Degree over drone, Shur','تربیت شنوایی ← درجه روی واخوان، در شور'],['Explorer: Shur vs Araq (Afshari)','کاوشگر: شور در برابر عراق افشاری']]],
+ [['Chahargah and Homayoun','چهارگاه و همایون'],['The J S B tetrachord, and how it differs from harmonic minor\'s B H B.','دانگ J S B و تفاوتش با B H B مینور هارمونیک.'],
+  [['Ear training → Step size level 3','تربیت شنوایی ← اندازه‌ی فاصله، سطح ۳'],['Explorer: Chahargah vs Harmonic minor, Homayoun vs Chahargah','کاوشگر: چهارگاه در برابر مینور هارمونیک، همایون در برابر چهارگاه'],['Ear training → Which mode? level 2','تربیت شنوایی ← کدام گام؟ سطح ۲']]],
+ [['Segah, Rast, Mahur','سه‌گاه، راست، ماهور'],['Complete the dastgah set; Segah\'s tonic on a koron note.','تکمیل مجموعه‌ی دستگاه‌ها؛ نت پایه‌ی سه‌گاه روی یک نت کُرُن.'],
+  [['Ear training → Tetrachord level 3','تربیت شنوایی ← دانگ، سطح ۳'],['Ear training → Which mode? level 3','تربیت شنوایی ← کدام گام؟ سطح ۳'],['Echo drill in each dastgah','تمرین پژواک در هر دستگاه']]]
+];
+function renderPlan(){
+  const done=store.get('plan',{});
+  $('#stages').innerHTML=STAGES.map(([h,p,items],i)=>`<div class="stage"><div class="no">${S.lang==='fa'?'۱۲۳۴۵۶'[i]:i+1}</div><div><h4>${L2(...h)}</h4><div class="muted" style="font-size:.9rem">${L2(...p)}</div><ul style="list-style:none;padding:0">${items.map((it,j)=>`<li><label class="chk"><input type="checkbox" id="pl-${i}-${j}" ${done[i+'-'+j]?'checked':''}> <span>${L2(...it)}</span></label></li>`).join('')}</ul></div></div>`).join('');
+}
+
+/* ---------- language ---------- */
+function applyLang(){
+  const app=$('#app');app.dir=S.lang==='fa'?'rtl':'ltr';app.lang=S.lang;
+  $$('[data-i18n]').forEach(el=>{el.innerHTML=tx(el.dataset.i18n)});
+  $('#h1').innerHTML=tx('h1');$('#langBtn').textContent=tx('lang');$('#langBtn').lang=S.lang==='fa'?'en':'fa';
+  document.title=S.lang==='fa'?'پرده':'Parde';
+  setStatus();const b=$('#pDrone');b.textContent=tx(S.drone?'drone_on':'drone_off');
+  fillSelects();renderExplore();renderIntervals();renderQTypes();renderPlan();renderQAnswers();renderScore();
+  if(!echoRun)$('#echoStatus').textContent='';
+}
+
+/* ---------- feedback (claude.ai comments, composer-only: opens the shell's own comment box) ---------- */
+let commentsNS;const commentsReady=(window.claude&&window.claude.use)?window.claude.use('comments').then(c=>commentsNS=c).catch(()=>commentsNS=null):Promise.resolve(commentsNS=null);
+/* outside claude.ai: on GitHub Pages (user.github.io/repo/) feedback goes to the repo's Issues page */
+function githubIssuesURL(){
+  const h=location.hostname;if(!/\.github\.io$/i.test(h))return null;
+  const user=h.split('.')[0],seg=location.pathname.split('/').filter(Boolean)[0],repo=seg&&!/\.html?$/i.test(seg)?seg:h;
+  return `https://github.com/${user}/${repo}/issues/new?title=${encodeURIComponent('Feedback: ')}`;
+}
+async function sendFeedback(){
+  const msg=$('#fbMsg');msg.textContent='';
+  const gh=githubIssuesURL();if(gh&&!(window.claude&&window.claude.use)){window.open(gh,'_blank','noopener');msg.textContent=tx('fb_gh');return}
+  const c=commentsNS===undefined?await commentsReady:commentsNS;
+  if(!c){msg.textContent=tx('fb_signin');return}
+  try{const r=await c.openComposer({element:$('#credit')});if(r&&r.opened)msg.textContent=tx('fb_open')}
+  catch(e){msg.textContent=tx('fb_signin')}
+}
+/* ---------- wiring ---------- */
+applyLang();
+$('#langBtn').onclick=()=>{S.lang=S.lang==='fa'?'en':'fa';saveSettings();applyLang()};
+$$('nav.tabs button').forEach(b=>b.onclick=()=>{$$('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));['explore','intervals','ear','plan'].forEach(t=>$('#tab-'+t).hidden=t!==b.dataset.tab);store.set('tab',b.dataset.tab);if(b.dataset.tab==='ear'&&!Q.cur)newQ(false)});
+const savedTab=store.get('tab','explore');const tb=$(`nav.tabs [data-tab="${savedTab}"]`);if(tb&&savedTab!=='explore')tb.click();
+$('#mode').onchange=e=>{S.mode=e.target.value;renderExplore()};
+$('#cmp').onchange=e=>{S.cmp=e.target.value;renderExplore()};
+$('#tonic').onchange=e=>{S.tonic=+e.target.value;renderExplore();renderIntervals()};
+$('#tuning').onchange=e=>{S.tuning=e.target.value;renderExplore();renderIntervals()};
+$('#timbre').onchange=e=>{S.timbre=e.target.value;renderExplore()};
+$('#bpm').oninput=e=>{S.bpm=+e.target.value;$('#bpmv').textContent=S.bpm};$('#bpm').onchange=renderExplore;
+$('#vol').oninput=e=>{S.vol=+e.target.value;if(master)master.gain.value=S.vol};$('#vol').onchange=saveSettings;
+$('#pUp').onclick=()=>play(scaleEvents(M[S.mode],'up'));
+$('#pDown').onclick=()=>play(scaleEvents(M[S.mode],'down'));
+$('#pBoth').onclick=()=>play(scaleEvents(M[S.mode],'both'));
+$('#pCmp').onclick=()=>{const c=S.cmp&&M[S.cmp];play(c?[...scaleEvents(M[S.mode],'up','r',0),...scaleEvents(c,'up','c',10)]:scaleEvents(M[S.mode],'up'))};
+$('#pDrone').onclick=()=>setDrone(!S.drone);
+$('#pEcho').onclick=echoDrill;
+$('#pStop').onclick=()=>stopAll(false);
+$('#aTest').onclick=testSound;
+document.addEventListener('click',e=>{
+  if(e.target.closest('#fbBtn')){sendFeedback();return}
+  const seg=e.target.closest('.seg');if(seg){const m=M[seg.dataset.m],d=degs(m.pat),i=+seg.dataset.seg;play([{f:fq(d[i]),at:0},{f:fq(d[i+1]),at:1,d:1.3}]);return}
+  const tk=e.target.closest('.tick');if(tk){playDeg(+tk.dataset.deg,M[tk.dataset.m],tk.id.replace(/\d+$/,''));return}
+  const dot=e.target.closest('.dot');if(dot){playDeg(+dot.dataset.deg);return}
+  const iv=e.target.closest('[data-iv]');if(iv){playInterval(iv.dataset.iv,tonicFreq(),true);return}
+  const vs=e.target.closest('[data-ivvs]');if(vs){const b=tonicFreq(),k=vs.dataset.ivvs;play([{f:b,at:0},{f:b*Math.pow(2,tun().T/1200),at:1,d:1.3},{f:b,at:3},{f:b*Math.pow(2,tun()[k]/1200),at:4,d:1.3}]);return}
+  const pm=e.target.closest('[data-play]');if(pm){play(scaleEvents(M[pm.dataset.play],'up','m'));return}
+  const qt=e.target.closest('[data-qt]');if(qt){Q.type=qt.dataset.qt;store.set('qtype',Q.type);renderQTypes();newQ();return}
+  const an=e.target.closest('[data-a]');if(an){answer(an.dataset.a,an);return}
+});
+document.addEventListener('keydown',e=>{if(e.target.matches('input,select'))return;
+  if($('#tab-explore').hidden===false&&/^[1-8]$/.test(e.key)){playDeg(+e.key-1)}
+  if(e.target.classList&&e.target.classList.contains('dot')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();playDeg(+e.target.dataset.deg)}
+});
+$('#qlevel').onchange=e=>{Q.level=+e.target.value;store.set('lvl-'+Q.type,Q.level);newQ()};
+$('#qReplay').onclick=()=>Q.cur&&Q.cur.play();
+$('#qRef').onclick=()=>Q.cur&&Q.cur.ref();
+$('#qNext').onclick=()=>newQ();
+$('#f1').oninput=calc;$('#f2').oninput=calc;
+$('#fPlay').onclick=()=>{const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0)play([{f:a,at:0},{f:b,at:1},{f:[a,b],at:2.5,d:3}])};
+$('#stages').addEventListener('change',e=>{if(e.target.type==='checkbox'){const d=store.get('plan',{});d[e.target.id.slice(3)]=e.target.checked;store.set('plan',d)}});
+})();
+</script>
+</body>
+</html>
