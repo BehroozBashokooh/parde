@@ -1,21 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Parde</title>
-<meta name="description" content="Parde (پرده) — hear and measure the intervals of Persian music. Scale patterns after Nosa's ScalesTest app (music.nosa.com/ScalesTest), based on the research of Maestro Hamid Motebassem and Mehrdad Momeni.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232c4a9a'/%3E%3Cpath d='M9 7v18M9 15l12 5-12 5' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Vazirmatn:wght@400;600&display=swap">
-<style>
-:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body{margin:0}
-img{max-width:100%}
-[hidden]{display:none!important}
-</style>
-</head>
-<body>
 <style>
 :root{
   --bg:#f2f3f7; --surface:#ffffff; --sunk:#e8ebf2; --ink:#1b2233; --muted:#5a6377; --line:#d6dbe6;
@@ -167,6 +153,9 @@ a{color:var(--accent)}
 @media (max-width:600px){.credit{grid-template-columns:1fr}}
 .fbrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:.5rem!important}
 .fbrow .btn{padding:4px 10px;font-size:.85rem}
+.altbtn{font:inherit;font-size:.8rem;padding:2px 8px;border-radius:999px;border:1px dashed var(--accent);background:var(--surface);color:var(--ink);cursor:pointer;margin:1px 0}
+.altbtn:hover{background:var(--sunk)}
+.altdot{cursor:pointer}
 .srcbadge{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:none}
 a.srcbadge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 </style>
@@ -181,7 +170,7 @@ a.srcbadge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,
       <button class="btn langbtn" id="langBtn" type="button"></button>
       <div class="controls" aria-label="Sound settings">
         <label class="field"><span data-i18n="tuning"></span>
-          <select id="tuning"><option value="pyth" data-i18n="tun_pyth"></option><option value="q" data-i18n="tun_q"></option></select>
+          <select id="tuning"><option value="nosa" data-i18n="tun_nosa"></option><option value="q" data-i18n="tun_q"></option></select>
         </label>
         <label class="field"><span data-i18n="sound"></span>
           <select id="timbre"><option value="pluck" data-i18n="pluck"></option><option value="sine" data-i18n="sine"></option></select>
@@ -335,25 +324,25 @@ en:{
  h1:'Parde <span class="fa">پرده</span>',
  sub:'Hear and measure the intervals of Persian music — from major and minor to the dastgahs, from the whole tone to the koron.',
  lang:'فارسی',
- tuning:'Tuning',tun_pyth:'Persian model (T 204¢ · B 90¢ · J 147¢)',tun_q:'Vaziri 24-TET (T 200 · B 100 · J 150)',
+ tuning:'Tuning',tun_nosa:'Nosa (T 203.9 · B 90.2 · J 143.5 / 150.6)',tun_q:'Vaziri 24-TET (T 200 · B 100 · J 150)',
  sound:'Sound',pluck:'Plucked string',sine:'Pure tone',volume:'Volume',test:'♪ Test sound',
  st_live:'Sound ready',st_file:'Sound: compatibility mode',st_unknown:'Sound: press Test sound',st_blocked:'Sound blocked by the browser',
  drone_on:'Drone: on',drone_off:'Drone: off',
  credit_lbl:'Source',
- credit_body:`<p>The scale patterns in Parde come from <a href="${NOSA}" target="_blank" rel="noopener"><b>Nosa's ScalesTest app</b></a> — <i>Key-signature system: representing key-signature classes and scales</i> (<span class="fa" lang="fa">نظام سرکلیدها</span>), test version 0.1, Dey 1401 — built on the research of Maestro <b>Hamid Motebassem</b> and <b>Mehrdad Momeni</b>, <i>A study toward standardising key signatures in the notation of Persian music</i>. Free use of that app is supported by NOSA (Iran Software &amp; Hardware Co.).</p><p class="muted">Parde is an independent study companion, not made by or affiliated with Nosa. Its creator does not have the musical knowledge of the creators of the Nosa app, so despite best efforts, errors and mistakes are possible. The cent values, sounds, exercises and descriptions are Parde's own; for authoritative diagrams and notation, rely on the original Nosa app.</p><p class="fbrow">Spotted a mistake or have a suggestion? <button class="btn" id="fbBtn" type="button">✎ Send feedback</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
+ credit_body:`<p>The scale patterns and interval sizes in Parde come from <a href="${NOSA}" target="_blank" rel="noopener"><b>Nosa's ScalesTest app</b></a> — <i>Key-signature system: representing key-signature classes and scales</i> (<span class="fa" lang="fa">نظام سرکلیدها</span>), test version 0.1, Dey 1401 — built on the research of Maestro <b>Hamid Motebassem</b> and <b>Mehrdad Momeni</b>, <i>A study toward standardising key signatures in the notation of Persian music</i>. Free use of that app is supported by NOSA (Iran Software &amp; Hardware Co.).</p><p class="muted">Parde is an independent study companion, not made by or affiliated with Nosa. Its creator does not have the musical knowledge of the creators of the Nosa app, so despite best efforts, errors and mistakes are possible. The sounds, exercises and descriptions are Parde's own; for authoritative diagrams and notation, rely on the original Nosa app.</p><p class="fbrow">Spotted a mistake or have a suggestion? <button class="btn" id="fbBtn" type="button">✎ Send feedback</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
  tab_explore:'Scale explorer',tab_intervals:'Building blocks',tab_ear:'Ear training',tab_plan:'Practice path',
  mode:'Mode',cmp:'Compare with',tonic:'Tonic',tempo:'Tempo',
  up:'▲ Ascend',down:'▼ Descend',both:'Up &amp; down',pcmp:'Play mode, then comparison',echo:'Echo drill',stop:'■ Stop',
  none:'— none —',g_Western:'Western',g_Dastgah:'Dastgah','g_Avaz & gusheh':'Avaz & gusheh',
  wheel_h:'The octave as a circle · 1200 cents',
- wheel_note:'Long ticks: 12-TET semitones (piano keys). Short ticks: quarter tones. Filled dots: {m}. Rings: comparison. Click a dot or press <kbd>1</kbd>–<kbd>8</kbd>.',
+ wheel_note:'Long ticks: 12-TET semitones (piano keys). Short ticks: quarter tones. Filled dots: {m}. Rings: comparison. Hollow dots: variable degrees (Nosa\'s bracketed notes). Click a dot or press <kbd>1</kbd>–<kbd>8</kbd>.',
  ruler_h:'Interval ruler · widths proportional to cents',deg_h:'Degrees in numbers',
- model_note:'Interval patterns: Nosa ScalesTest (see Source above). The cent sizes are Parde\'s reference model, not Nosa\'s: in performance the koron\'s size moves with dastgah, gusheh and player, typically around 130–170¢ for J.',
+ model_note:'Interval patterns and sizes follow Nosa ScalesTest (see Source above). Nosa uses two sizes of J, 143.5¢ and 150.6¢, which together make a minor third (294.1¢). In performance the koron\'s size still moves with dastgah, gusheh and player.',
  src_nosa:'Pattern source: Nosa ScalesTest ↗',src_lab:'Pattern: standard Western theory — not listed in the Nosa app',
  f_lower:'Lower tetrachord',f_deg4:'Degree 4',f_deg5:'Degree 5',f_upper:'Upper tetrachord',f_upperpart:'Upper part',
  type:'type',notpure4:'not a pure fourth',pure4:'pure fourth ✓',pure5:'pure fifth ✓',from4:'¢ from a pure fourth',from5:'¢ from a pure fifth',deg58:'(degrees 5–8)',
  vs:'vs',deg:'deg',identical:'identical pitches',compare:'Compare: ',
- th:['Degree','Note','Cents from tonic','Step into it','Hz','Offset from piano'],between:'between keys',near:'≈ on a piano key (within 10¢)',
+ th:['Degree','Note','Cents from tonic','Step into it','Hz','Offset from piano','Variable form'],between:'between keys',near:'≈ on a piano key (within 10¢)',
  echo_listen:'Phrase {n}/8 · <span class="muted">listen…</span>',echo_turn:'Phrase {n}/8 · <span class="turn live">your turn — play it back</span> <span class="muted">(answer: {a})</span>',echo_done:'Echo drill finished — 8 phrases. Run it again or change mode.',
  iv_h2:'Every scale here is built from five step sizes',
  iv_p:'Western theory names only two steps — whole (T) and half (B). Persian theory adds the neutral step <b>J</b> (mojannab), the one you hear at a koron, and its complement <b>S</b>. Learn to hear these five and every scale in the explorer becomes a readable sentence. The letters follow the Nosa app.',
@@ -364,7 +353,7 @@ en:{
  mm_h2:'Major and minor, written in steps',
  mm_p:'A scale of 7 steps splits naturally into two <b>tetrachords</b> (four notes spanning a perfect fourth, 498¢) joined by a whole tone. Persian theory calls the tetrachord a <i>dang</i>. Change which small steps fill the fourth and you change the mode.',
  play_major:'Play major',play_minor:'Play natural minor',play_shur:'Play Shur',
- mm_note:'Notice: natural minor and Shur share every note except degree 2, which Shur lowers by about 57¢ to a koron.',
+ mm_note:'Notice: natural minor and Shur share every note except degree 2, which Shur lowers by about 60¢ to a koron.',
  ear_h2:'Ear training',ear_p:'Each question plays automatically. Replay as often as you like — the goal is recognition, not speed.',
  level:'Level',playas:'Play as',mel:'Melodic (one after the other)',harm:'Melodic, then together',
  replay:'↻ Replay',hear:'Hear the choices',next:'Next question',
@@ -382,25 +371,25 @@ fa:{
  h1:'پرده <span class="fa" lang="en" dir="ltr">Parde</span>',
  sub:'شنیدن و سنجیدن فواصل موسیقی ایرانی — از ماژور و مینور تا دستگاه‌ها، از پرده تا کُرُن.',
  lang:'English',
- tuning:'سیستم فواصل',tun_pyth:'مدل ایرانی (T 204¢ · B 90¢ · J 147¢)',tun_q:'۲۴ ربع‌پرده‌ی وزیری (T 200 · B 100 · J 150)',
+ tuning:'سیستم فواصل',tun_nosa:'نوسا (T 203.9 · B 90.2 · J 143.5 / 150.6)',tun_q:'۲۴ ربع‌پرده‌ی وزیری (T 200 · B 100 · J 150)',
  sound:'صدا',pluck:'سیم زخمه‌ای',sine:'صدای سینوسی',volume:'حجم صدا',test:'♪ آزمایش صدا',
  st_live:'صدا آماده است',st_file:'صدا: حالت سازگاری',st_unknown:'صدا: «آزمایش صدا» را بزنید',st_blocked:'مرورگر صدا را مسدود کرده است',
  drone_on:'واخوان: روشن',drone_off:'واخوان: خاموش',
  credit_lbl:'منبع',
- credit_body:`<p>الگوهای گام در «پرده» از <a href="${NOSA}" target="_blank" rel="noopener"><b>نرم‌افزار ScalesTest نوسا</b></a> گرفته شده است — «نظام سرکلیدها: بازنمایی کلاس‌های سرکلید و اشل‌ها»، نسخه‌ی آزمایشی ۰٫۱، دی ماه ۱۴۰۱ — بر اساس پژوهش استاد <b>حمید متبسم</b> و <b>مهرداد مومنی</b>، «پژوهشی برای تثبیت سرکلیدها در نگارش موسیقی ایرانی». استفاده‌ی آزاد از آن نرم‌افزار با پشتیبانی شرکت نرم‌افزار و سخت‌افزار ایران (نوسا) میسر شده است.</p><p class="muted">«پرده» یک ابزار آموزشی مستقل است و ساخته‌ی نوسا نیست و وابستگی به آن ندارد. سازنده‌ی این ابزار دانش موسیقایی پدیدآورندگان نرم‌افزار نوسا را ندارد؛ بنابراین با وجود همه‌ی تلاش‌ها، خطا و اشتباه ممکن است. مقادیر سنت، صداها، تمرین‌ها و توضیحات از خود این ابزار است؛ برای نمودارها و نگارش معتبر، به نرم‌افزار اصلی نوسا مراجعه کنید.</p><p class="fbrow">اشتباهی دیدید یا پیشنهادی دارید؟ <button class="btn" id="fbBtn" type="button">✎ ارسال بازخورد</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
+ credit_body:`<p>الگوهای گام و اندازه‌ی فواصل در «پرده» از <a href="${NOSA}" target="_blank" rel="noopener"><b>نرم‌افزار ScalesTest نوسا</b></a> گرفته شده است — «نظام سرکلیدها: بازنمایی کلاس‌های سرکلید و اشل‌ها»، نسخه‌ی آزمایشی ۰٫۱، دی ماه ۱۴۰۱ — بر اساس پژوهش استاد <b>حمید متبسم</b> و <b>مهرداد مومنی</b>، «پژوهشی برای تثبیت سرکلیدها در نگارش موسیقی ایرانی». استفاده‌ی آزاد از آن نرم‌افزار با پشتیبانی شرکت نرم‌افزار و سخت‌افزار ایران (نوسا) میسر شده است.</p><p class="muted">«پرده» یک ابزار آموزشی مستقل است و ساخته‌ی نوسا نیست و وابستگی به آن ندارد. سازنده‌ی این ابزار دانش موسیقایی پدیدآورندگان نرم‌افزار نوسا را ندارد؛ بنابراین با وجود همه‌ی تلاش‌ها، خطا و اشتباه ممکن است. صداها، تمرین‌ها و توضیحات از خود این ابزار است؛ برای نمودارها و نگارش معتبر، به نرم‌افزار اصلی نوسا مراجعه کنید.</p><p class="fbrow">اشتباهی دیدید یا پیشنهادی دارید؟ <button class="btn" id="fbBtn" type="button">✎ ارسال بازخورد</button> <span class="muted" id="fbMsg" role="status"></span></p>`,
  tab_explore:'کاوشگر گام',tab_intervals:'فواصل پایه',tab_ear:'تربیت شنوایی',tab_plan:'مسیر تمرین',
  mode:'گام / مُد',cmp:'مقایسه با',tonic:'نت پایه',tempo:'سرعت',
  up:'▲ بالارونده',down:'▼ پایین‌رونده',both:'بالا و پایین',pcmp:'پخش گام، سپس گام مقایسه',echo:'تمرین پژواک',stop:'■ توقف',
  none:'— هیچ —',g_Western:'غربی',g_Dastgah:'دستگاه','g_Avaz & gusheh':'آواز و گوشه',
  wheel_h:'اکتاو به شکل دایره · ۱۲۰۰ سنت',
- wheel_note:'خط‌های بلند: نیم‌پرده‌های تعدیل‌شده (کلیدهای پیانو). خط‌های کوتاه: ربع‌پرده‌ها. دایره‌های پر: {m}. حلقه‌ها: گام مقایسه. روی یک نقطه بزنید یا کلید <kbd>1</kbd> تا <kbd>8</kbd> را فشار دهید.',
+ wheel_note:'خط‌های بلند: نیم‌پرده‌های تعدیل‌شده (کلیدهای پیانو). خط‌های کوتاه: ربع‌پرده‌ها. دایره‌های پر: {m}. حلقه‌ها: گام مقایسه. دایره‌های توخالی: درجه‌های متغیر (نت‌های داخل پرانتز در نوسا). روی یک نقطه بزنید یا کلید <kbd>1</kbd> تا <kbd>8</kbd> را فشار دهید.',
  ruler_h:'خط‌کش فواصل · پهنا متناسب با سنت',deg_h:'درجه‌ها به عدد',
- model_note:'الگوهای فاصله‌ای: ScalesTest نوسا (بخش «منبع» را در بالا ببینید). اندازه‌های سنت مدل مرجع همین ابزارند، نه نوسا: در اجرا اندازه‌ی کُرُن با دستگاه، گوشه و نوازنده تغییر می‌کند؛ برای J معمولاً حدود ۱۳۰ تا ۱۷۰ سنت.',
+ model_note:'الگوها و اندازه‌ی فواصل مطابق ScalesTest نوسا است (بخش «منبع» را در بالا ببینید). نوسا دو اندازه برای J به کار می‌برد، ۱۴۳٫۵ و ۱۵۰٫۶ سنت، که با هم یک سوم کوچک (۲۹۴٫۱ سنت) می‌سازند. در اجرا اندازه‌ی کُرُن همچنان با دستگاه، گوشه و نوازنده تغییر می‌کند.',
  src_nosa:'منبع الگو: ScalesTest نوسا ↗',src_lab:'الگو: نظریه‌ی استاندارد غربی — در نرم‌افزار نوسا نیامده',
  f_lower:'دانگ پایین',f_deg4:'درجه‌ی ۴',f_deg5:'درجه‌ی ۵',f_upper:'دانگ بالا',f_upperpart:'بخش بالا',
  type:'',notpure4:'چهارم درست نیست',pure4:'چهارم درست ✓',pure5:'پنجم درست ✓',from4:' سنت فاصله با چهارم درست',from5:' سنت فاصله با پنجم درست',deg58:'(درجه‌های ۵ تا ۸)',
  vs:'در برابر',deg:'درجه‌ی',identical:'نت‌ها یکسان‌اند',compare:'مقایسه: ',
- th:['درجه','نت','سنت از نت پایه','فاصله‌ی ورودی','هرتز','فاصله تا کلید پیانو'],between:'بین کلیدها',near:'≈ روی کلید پیانو (کمتر از ۱۰ سنت)',
+ th:['درجه','نت','سنت از نت پایه','فاصله‌ی ورودی','هرتز','فاصله تا کلید پیانو','شکل متغیر'],between:'بین کلیدها',near:'≈ روی کلید پیانو (کمتر از ۱۰ سنت)',
  echo_listen:'جمله‌ی {n} از ۸ · <span class="muted">گوش دهید…</span>',echo_turn:'جمله‌ی {n} از ۸ · <span class="turn live">نوبت شماست — آن را بنوازید</span> <span class="muted">(پاسخ: <bdi dir="ltr">{a}</bdi>)</span>',echo_done:'تمرین پژواک تمام شد — ۸ جمله. دوباره اجرا کنید یا گام را عوض کنید.',
  iv_h2:'همه‌ی گام‌های اینجا از پنج اندازه‌ی فاصله ساخته می‌شوند',
  iv_p:'نظریه‌ی غربی فقط دو فاصله را نام می‌برد — پرده (T) و نیم‌پرده (B). نظریه‌ی ایرانی فاصله‌ی میانه‌ی <b>J</b> (مجنب) را می‌افزاید، همان که در کُرُن می‌شنوید، و مکمل آن <b>S</b> را. این پنج فاصله را بشناسید تا هر گام در کاوشگر مانند جمله‌ای خوانا شود. حروف مطابق نرم‌افزار نوسا است.',
@@ -411,7 +400,7 @@ fa:{
  mm_h2:'ماژور و مینور، به زبان فاصله‌ها',
  mm_p:'گامی هفت‌فاصله‌ای به‌طور طبیعی به دو <b>دانگ</b> (چهار نت در فاصله‌ی چهارم درست، ۴۹۸ سنت) تقسیم می‌شود که با یک پرده به هم وصل‌اند. با تغییر فواصل کوچکی که چهارم را پر می‌کنند، مُد عوض می‌شود.',
  play_major:'پخش ماژور',play_minor:'پخش مینور طبیعی',play_shur:'پخش شور',
- mm_note:'دقت کنید: مینور طبیعی و شور در همه‌ی نت‌ها جز درجه‌ی دوم مشترک‌اند؛ شور آن را حدود ۵۷ سنت پایین می‌آورد و کُرُن می‌کند.',
+ mm_note:'دقت کنید: مینور طبیعی و شور در همه‌ی نت‌ها جز درجه‌ی دوم مشترک‌اند؛ شور آن را حدود ۶۰ سنت پایین می‌آورد و کُرُن می‌کند.',
  ear_h2:'تربیت شنوایی',ear_p:'هر سؤال خودکار پخش می‌شود. هر چند بار که خواستید دوباره گوش دهید — هدف شناختن است، نه سرعت.',
  level:'سطح',playas:'نحوه‌ی پخش',mel:'ملودیک (پشت سر هم)',harm:'ملودیک، سپس همزمان',
  replay:'↻ پخش دوباره',hear:'شنیدن گزینه‌ها',next:'سؤال بعدی',
@@ -431,14 +420,15 @@ const tx=(k,vars)=>{let s=(TX[S.lang]&&TX[S.lang][k]!=null)?TX[S.lang][k]:TX.en[
 /* ---------- theory model ---------- */
 const lg=x=>1200*Math.log2(x);
 const TUN={
-  pyth:{T:lg(9/8),B:lg(256/243),J:lg(32/27)/2,S:2*lg(9/8)-lg(32/27)/2,H:lg(19683/16384),
+  /* Nosa ScalesTest constants: T 203.91, B 90.22, J 143.5 (small) / 150.63 (large, = T+B−J), S = 2T−J, H = 2T−B */
+  nosa:{T:203.91,B:90.22,J:143.5,Jl:203.91+90.22-143.5,S:2*203.91-143.5,H:2*203.91-90.22,
         nat:[0,lg(9/8),lg(81/64),lg(4/3),lg(3/2),lg(27/16),lg(243/128)],flat:lg(2187/2048)},
   q:{T:200,B:100,J:150,S:250,H:300,nat:[0,200,400,500,700,900,1100],flat:100}
 };
 const IVINFO={
   T:{name:'Tanini',fa:'طنینی',en:'whole tone',enFa:'پرده',ratio:'9 : 8',q:200},
   B:{name:'Baqiyye',fa:'بقیه',en:'small half step (limma)',enFa:'نیم‌پرده‌ی کوچک (لیما)',ratio:'256 : 243',q:100},
-  J:{name:'Mojannab',fa:'مجنب',en:'neutral step — the koron sound',enFa:'فاصله‌ی میانه — صدای کُرُن',ratio:'√(32 : 27)',q:150},
+  J:{name:'Mojannab',fa:'مجنب',en:'neutral step — the koron sound',enFa:'فاصله‌ی میانه — صدای کُرُن',ratio:'small + large = 294.1¢ (32 : 27)',q:150},
   S:{name:'Large step',fa:'فاصله‌ی بزرگ',en:'T + (T − J)',enFa:'T + (T − J)',ratio:'2T − J',q:250},
   H:{name:'Augmented 2nd',fa:'دوم افزوده',en:'T + apotome',enFa:'T + آپوتوم',ratio:'19683 : 16384',q:300}
 };
@@ -458,8 +448,8 @@ const MODES=[
   desc:'Often called the mother of the dastgahs: Abu Ata, Bayat-e Tork, Afshari and Dashti are traditionally grouped under it. Its lower tetrachord J J T puts a koron on degree 2.',
   descFa:'اغلب «مادر دستگاه‌ها» خوانده می‌شود: ابوعطا، بیات ترک، افشاری و دشتی به‌طور سنتی زیرمجموعه‌ی آن‌اند. دانگ پایینی J J T درجه‌ی دوم را کُرُن می‌کند.'},
  {id:'segah',g:'Dastgah',src:'nosa',name:'Segah',fa:'سه‌گاه',pat:'JTJJTTJ',
-  desc:'Built largely from neutral steps. In practice its tonic is usually itself a koron note (e.g. Mi-koron); here it starts on the selected tonic so you can compare shapes.',
-  descFa:'بیشتر از فواصل مجنب ساخته شده است. در اجرا، نت پایه‌ی آن معمولاً خود یک نت کُرُن است (مثلاً می کُرُن)؛ اینجا برای مقایسه‌ی شکل‌ها از نت پایه‌ی انتخابی شروع می‌شود.'},
+  desc:'Built largely from neutral steps, and its tonic is itself a microtonal note (traditionally e.g. Mi koron). As in the Nosa app, Segah starts 53¢ above the selected key note: with Do selected it begins on Do sori.',
+  descFa:'بیشتر از فواصل مجنب ساخته شده است و نت پایه‌ی آن خود یک نت ریزپرده‌ای است (به‌طور سنتی مثلاً می کُرُن). مانند نرم‌افزار نوسا، سه‌گاه ۵۳ سنت بالاتر از نت پایه‌ی انتخابی شروع می‌شود: با انتخاب «دو» از دو سُری آغاز می‌شود.'},
  {id:'chahargah',g:'Dastgah',src:'nosa',name:'Chahargah',fa:'چهارگاه',pat:'JSBTJSB',
   desc:'Two identical J S B tetrachords joined by a whole tone — a bright, assertive mode. The S step gives its middle a stretched, "open" sound.',
   descFa:'دو دانگ یکسان J S B که با یک پرده به هم وصل شده‌اند — مُدی درخشان و استوار. فاصله‌ی S به میانه‌ی آن حالتی کشیده و «باز» می‌دهد.'},
@@ -498,11 +488,37 @@ const LET=()=>S.lang==='fa'?LET_FA:LET_EN;
 const tonicName=i=>LET()[TONICS[i][0]]+(TONICS[i][1]<0?'♭':'');
 const PC12=[[0,''],[0,'♯'],[1,''],[2,'♭'],[2,''],[3,''],[3,'♯'],[4,''],[5,'♭'],[5,''],[6,'♭'],[6,'']];
 
-const S={mode:'shur',cmp:'minor',tonic:0,tuning:'pyth',timbre:'pluck',bpm:84,drone:false,vol:.8,lang:'en',...store.get('settings',{})};
+const S={mode:'shur',cmp:'minor',tonic:0,tuning:'nosa',timbre:'pluck',bpm:84,drone:false,vol:.8,lang:'en',...store.get('settings',{})};
 if(!['pluck','sine'].includes(S.timbre))S.timbre='pluck'; // settings saved by the tar/setar version
+if(!TUN[S.tuning])S.tuning='nosa'; // 'pyth' from older versions
 S.drone=false;if(typeof S.tonic!=='number'||!TONICS[S.tonic])S.tonic=0;
 const tun=()=>TUN[S.tuning];
-const degs=pat=>{let c=0;const o=[0];for(const k of pat){c+=tun()[k];o.push(c)}return o};
+/* degree positions (cents from the key note) read from the Nosa app's circle, per mode */
+const NOSA_DEG={
+  JJTTBTT:[0,143.5,294.13,498.04,701.95,792.17,996.08,1200],   // Shur
+  TBTTTJJ:[0,203.91,294.13,498.04,701.95,905.86,1049.36,1200], // Araq Afshari
+  JTJJTTJ:[53.28,203.91,407.82,551.32,701.95,905.86,1109.77,1253.28], // Segah: starts 53.28¢ above the key note, as in Nosa
+  TBTTJTJ:[0,203.91,294.13,498.04,701.95,845.45,1049.36,1200], // Mokhalef Segah
+  JSBTBTT:[0,143.5,407.82,498.04,701.95,792.17,996.08,1200],   // Homayoun
+  JSBTJSB:[0,143.5,407.82,498.04,701.95,845.45,1109.77,1200],  // Chahargah
+  TTBTTTB:[0,203.91,407.82,498.04,701.95,905.86,1109.77,1200], // Mahur / Major
+  TBTTTTB:[0,203.91,294.13,498.04,701.95,905.86,1109.77,1200], // Araq Mahur
+  TJJTTJJ:[0,203.91,347.41,498.04,701.95,905.86,1049.36,1200], // Rast
+  TJJJSBT:[0,203.91,347.41,498.04,641.54,905.86,996.08,1200],  // Saba (Persian)
+  TJJBHBT:[0,203.91,347.41,498.04,588.26,905.86,996.08,1200]   // Saba (Arabic)
+};
+/* Nosa's bracketed (variable) degrees: [degree index 0-6, cents from the key note] */
+const NOSA_ALT={
+  shur:[[1,90.22],[4,641.54],[5,845.45]], afshari:[[2,347.41],[6,996.08]], segah:[[0,0],[4,755.23]],
+  mokhalef:[[2,347.41],[6,996.08]], homayoun:[[1,90.22],[2,294.13],[5,845.45],[5,905.86]], chahargah:[[4,641.54]],
+  mahur:[[2,294.13],[2,347.41],[5,845.45],[6,996.08]], araq:[[2,407.82],[6,996.08]],
+  saba:[[1,90.22],[1,143.5]], sabaAr:[[1,90.22],[1,143.5]], major:[[3,611.73],[4,815.64]]
+};
+const alts=m=>S.tuning==='nosa'?(NOSA_ALT[m.id]||[]):[];
+const degs=pat=>{if(S.tuning==='nosa'&&NOSA_DEG[pat])return NOSA_DEG[pat];let c=0;const o=[0];for(const k of pat){c+=tun()[k];o.push(c)}return o};
+/* a tetrachord's three steps: from a Nosa mode that starts with it when possible */
+const genusCents=g=>{const m=MODES.find(m=>m.pat.startsWith(g));if(m){const d=degs(m.pat);return d.slice(1,4).map(c=>c-d[0])}let c=0;return [...g].map(k=>c+=tun()[k])};
+const stepCents=k=>k==='J'&&tun().Jl?(Math.random()<.5?tun().J:tun().Jl):tun()[k];
 const tonicCents=(ti=S.tonic)=>{const [l,a]=TONICS[ti];return tun().nat[l]+a*tun().flat};
 const tonicFreq=(ti=S.tonic)=>{let f=261.63*Math.pow(2,tonicCents(ti)/1200);return f>370?f/2:f};
 
@@ -615,7 +631,7 @@ function setDrone(on){
   if(droneNodes){const {g,oscs}=droneNodes;g.gain.setTargetAtTime(0,ctx.currentTime,.08);oscs.forEach(o=>o.stop(ctx.currentTime+.5));droneNodes=null}
   if(droneEl){droneEl.pause();droneEl=null}
   if(!on)return;
-  const f=tonicFreq()/2,fifth=1.5; // drone uses a pure 3:2 fifth in both tunings
+  const f=tonicFreq()/2*Math.pow(2,degs(M[S.mode].pat)[0]/1200),fifth=1.5; // drone uses a pure 3:2 fifth in both tunings
   const build=(c,dest,loopSafe)=>{
     const g=c.createGain();g.gain.value=loopSafe?.09:0;if(!loopSafe)g.gain.setTargetAtTime(.09,c.currentTime,.3);
     const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;lp.connect(g).connect(dest);
@@ -643,8 +659,8 @@ function fillSelects(){
 const chips=pat=>{let h='';[...pat].forEach((k,i)=>{h+=`<span class="chip" style="--c:var(--${k})">${k}</span>`;if(i===2||i===3)h+='<span class="chip sep">|</span>'});return h};
 function rulerHTML(mode,label,idp){
   const d=degs(mode.pat);
-  const segs=[...mode.pat].map((k,i)=>`<div class="seg" style="--c:var(--${k});flex-grow:${tun()[k]}" data-seg="${i}" data-m="${mode.id}" title="${ivName(k)}: ${tun()[k].toFixed(1)}¢"><b>${k}</b><small>${Math.round(tun()[k])}</small></div>`).join('');
-  const ticks=d.map((c,i)=>`<div class="tick" id="${idp}${i}" data-deg="${i}" data-m="${mode.id}" style="left:${c/12}%;top:46px"><span class="nm">${spell(i,c).html}</span><span class="n">${i+1}</span></div>`).join('');
+  const segs=[...mode.pat].map((k,i)=>{const w=d[i+1]-d[i];return `<div class="seg" style="--c:var(--${k});flex-grow:${w}" data-seg="${i}" data-m="${mode.id}" title="${ivName(k)}: ${w.toFixed(1)}¢"><b>${k}</b><small>${Math.round(w)}</small></div>`}).join('');
+  const ticks=d.map((c,i)=>`<div class="tick" id="${idp}${i}" data-deg="${i}" data-m="${mode.id}" style="left:${(c-d[0])/12}%;top:46px"><span class="nm">${spell(i,c).html}</span><span class="n">${i+1}</span></div>`).join('');
   return `<div class="ruler"><div class="lab"><span dir="auto">${label}</span><span class="muted">${mode.pat.split('').join(' ')}</span></div><div style="position:relative"><div class="bar">${segs}</div><div class="ticks">${ticks}</div></div></div>`;
 }
 function wheelSVG(m,c){
@@ -655,6 +671,7 @@ function wheelSVG(m,c){
   const d=degs(m.pat);
   [...m.pat].forEach((k,i)=>{const a0=d[i],a1=d[i+1],r=R-26;const [x0,y0]=pt(a0+10,r),[x1,y1]=pt(a1-10,r);s+=`<path d="M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}" fill="none" stroke="var(--${k})" stroke-width="7" stroke-linecap="round" opacity=".8"/>`;const [lx,ly]=pt((a0+a1)/2,r-18);s+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="11" fill="var(--${k})" font-family="IBM Plex Mono, monospace">${k}</text>`});
   if(c){degs(c.pat).slice(0,7).forEach(cc=>{const [x,y]=pt(cc,R);s+=`<circle cx="${x}" cy="${y}" r="13" fill="none" stroke="var(--S)" stroke-width="2" stroke-dasharray="3 2"/>`})}
+  alts(m).forEach(([i,cc])=>{const [x,y]=pt(cc,R);const sp=spell(i,cc);s+=`<g class="altdot" data-alt="${cc}" tabindex="0" role="button" aria-label="(${i+1}) ${sp.txt}"><title>(${i+1}) ${sp.txt} · ${cc.toFixed(1)}¢</title><circle cx="${x}" cy="${y}" r="8" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="8" font-weight="600" fill="var(--accent)">${i+1}</text></g>`});
   d.slice(0,7).forEach((cc,i)=>{const [x,y]=pt(cc,R),[tx_,ty]=pt(cc,R+26);const sp=spell(i,cc);
     const mark=sp.sh==='k'?`<tspan font-size="8" dy="-4">${L2('k','کرن')}</tspan>`:sp.sh==='s'?`<tspan font-size="8" dy="-4">${L2('s','سری')}</tspan>`:sp.sh;
     s+=`<g class="dot" data-deg="${i}" id="w${i}" tabindex="0" role="button" aria-label="${i+1}"><circle cx="${x}" cy="${y}" r="10" fill="var(--accent)"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="11" font-weight="600" fill="var(--surface)">${i+1}</text></g><text x="${tx_}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="11" fill="var(--ink)" font-family="${ff}">${sp.name}${mark}</text>`});
@@ -662,7 +679,7 @@ function wheelSVG(m,c){
 }
 function analyze(m){
   const t=tun(),d=degs(m.pat),out=[];
-  const g=m.pat.slice(0,3),four=d[3],five=d[4],pat=x=>`<bdi dir="ltr">${x.split('').join(' ')}</bdi>`;
+  const g=m.pat.slice(0,3),four=d[3]-d[0],five=d[4]-d[0],pat=x=>`<bdi dir="ltr">${x.split('').join(' ')}</bdi>`;
   const sg=v=>(v>0?'+':'')+v.toFixed(0);
   const p4=Math.abs(four-t.nat[3])<3,p5=Math.abs(five-t.nat[4])<3;
   out.push([tx('f_lower'),`${pat(g)} → ${p4?gName(g)+(tx('type')?' '+tx('type'):''):tx('notpure4')}`]);
@@ -689,7 +706,7 @@ function renderExplore(){
   let rows='<tr>'+tx('th').map(h=>`<th>${h}</th>`).join('')+'</tr>';
   d.forEach((cc,i)=>{const sp=spell(i,cc),dev=tc+cc-sp.ref,big=Math.abs(dev)>30,near=Math.abs(dev)<=10.5;
     const off=near?`<span class="muted" title="${tx('near')}">≈</span>`:`<bdi dir="ltr" class="${big?'dev-big':''}">${sp.key} ${dev>=0?'+':'−'}${Math.abs(dev).toFixed(0)}¢</bdi>${big?' <span class="muted">· '+tx('between')+'</span>':''}`;
-    rows+=`<tr><td class="num">${i+1}</td><td>${sp.html}</td><td class="num">${cc.toFixed(1)}</td><td>${i?`<span class="chip" style="--c:var(--${m.pat[i-1]})">${m.pat[i-1]}</span>`:''}</td><td class="num">${(tonicFreq()*Math.pow(2,cc/1200)).toFixed(2)}</td><td class="num">${off}</td></tr>`});
+    rows+=`<tr><td class="num">${i+1}</td><td>${sp.html}</td><td class="num">${(cc-d[0]).toFixed(1)}</td><td>${i?`<span class="chip" style="--c:var(--${m.pat[i-1]})">${m.pat[i-1]}</span>`:''}</td><td class="num">${(tonicFreq()*Math.pow(2,cc/1200)).toFixed(2)}</td><td class="num">${off}</td><td>${alts(m).filter(a=>a[0]===i%7&&i<7).map(([j,ac])=>`<button class="altbtn" type="button" data-alt="${ac}">${spell(j,ac).html} <span class="muted"><bdi dir="ltr">${(ac-d[0]).toFixed(1)}¢</bdi></span> ▶</button>`).join(' ')}</td></tr>`});
   $('#dtable').innerHTML=rows;
   if(S.drone)setDrone(true);
   saveSettings();
@@ -723,11 +740,11 @@ function echoDrill(){
 /* ---------- intervals tab ---------- */
 function renderIntervals(){
   const t=tun();
-  $('#ivgrid').innerHTML=Object.entries(IVINFO).map(([k,v])=>`<div class="iv" style="--c:var(--${k})"><span class="sym">${k}</span><span class="nm">${L2(v.name,v.fa)} <span class="fa">${L2(v.fa,v.name)}</span></span><span class="muted" style="font-size:.85rem">${L2(v.en,v.enFa)}</span><span class="num"><bdi dir="ltr">${t[k].toFixed(1)}¢ · ${S.tuning==='pyth'?v.ratio:''}</bdi>${S.tuning==='pyth'?'':tx('qt',{n:v.q/50})}</span><div class="btnrow" style="margin-top:6px"><button class="btn" data-iv="${k}">${tx('play')}</button><button class="btn" data-ivvs="${k}">${tx('vsT')}</button></div></div>`).join('');
+  $('#ivgrid').innerHTML=Object.entries(IVINFO).map(([k,v])=>`<div class="iv" style="--c:var(--${k})"><span class="sym">${k}</span><span class="nm">${L2(v.name,v.fa)} <span class="fa">${L2(v.fa,v.name)}</span></span><span class="muted" style="font-size:.85rem">${L2(v.en,v.enFa)}</span><span class="num"><bdi dir="ltr">${k==='J'&&t.Jl?t.J.toFixed(1)+' / '+t.Jl.toFixed(1):t[k].toFixed(1)}¢ · ${S.tuning==='nosa'?v.ratio:''}</bdi>${S.tuning==='nosa'?'':tx('qt',{n:v.q/50})}</span><div class="btnrow" style="margin-top:6px"><button class="btn" data-iv="${k}">${tx('play')}</button><button class="btn" data-ivvs="${k}">${tx('vsT')}</button></div></div>`).join('');
   $('#mmRulers').innerHTML=rulerHTML(M.major,mName(M.major),'mA')+rulerHTML(M.minor,mName(M.minor),'mB')+rulerHTML(M.shur,mName(M.shur),'mC');
   calc();
 }
-function playInterval(k,base=tonicFreq(),harm=false){const f2=base*Math.pow(2,tun()[k]/1200);const ev=[{f:base,at:0},{f:f2,at:1,d:1.2}];if(harm)ev.push({f:[base,f2],at:2.6,d:2});play(ev)}
+function playInterval(k,base=tonicFreq(),harm=false,cents){const f2=base*Math.pow(2,(cents??tun()[k])/1200);const ev=[{f:base,at:0},{f:f2,at:1,d:1.2}];if(harm)ev.push({f:[base,f2],at:2.6,d:2});play(ev)}
 function calc(){const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0){const c=lg(b/a);let best='T',bd=1e9;for(const k of 'TBJSH'){const dd=Math.abs(tun()[k]-Math.abs(c));if(dd<bd){bd=dd;best=k}}$('#fRes').textContent=tx('calc',{c:c.toFixed(1),b:Math.abs(a-b).toFixed(2),k:best})}}
 
 /* ---------- ear training ---------- */
@@ -745,14 +762,14 @@ function rnd(a){return a[Math.floor(Math.random()*a.length)]}
 function baseF(){return 196*Math.pow(2,Math.random()*0.75)}
 function genQ(){
   const L=Q.level,t=tun();
-  if(Q.type==='interval'){const pool=[['T','B'],['T','B','J'],['T','B','J','S','H']][L];const k=rnd(pool),b=baseF();
-    return {answers:pool,correct:k,label:x=>`${x} · ${ivName(x)}`,play:()=>playInterval(k,b,$('#qhow').value==='harm'),ref:()=>play(pool.flatMap((x,i)=>[{f:b,at:i*3},{f:b*Math.pow(2,t[x]/1200),at:i*3+1,d:1.4}]))}}
+  if(Q.type==='interval'){const pool=[['T','B'],['T','B','J'],['T','B','J','S','H']][L];const k=rnd(pool),b=baseF(),c1=stepCents(k);
+    return {answers:pool,correct:k,label:x=>`${x} · ${ivName(x)}`,play:()=>playInterval(k,b,$('#qhow').value==='harm',c1),ref:()=>play(pool.flatMap((x,i)=>[{f:b,at:i*3},{f:b*Math.pow(2,stepCents(x)/1200),at:i*3+1,d:1.4}]))}}
   if(Q.type==='majmin'){const k=rnd(['major','minor']),ti=Math.floor(Math.random()*TONICS.length);const d=degs(M[k].pat);
     let seq=[0,1,2,3,4,5,6,7];if(L===1){seq=[0];let p=0;for(let i=0;i<6;i++){p=Math.min(5,Math.max(0,p+rnd([-1,1,1,2,-2])));seq.push(p)}seq.push(2,1,0)}
     const ev=seq.map((i,n)=>({f:fq(d[i],ti),at:n*.8,d:.8}));
     return {answers:['major','minor'],correct:k,label:x=>mName(M[x]),play:()=>play(ev),ref:()=>play([...scaleEvents(M.major,'up','x',0),...scaleEvents(M.minor,'up','x',9)])}}
   if(Q.type==='tetra'){const pool=[['TTB','TBT','BTT'],['TTB','TBT','BTT','JJT','JSB'],['TTB','TBT','BTT','JJT','JSB','TJJ','JTJ']][L];const k=rnd(pool),b=baseF();
-    const mk=(g,st,bb)=>{let c=0;const o=[{f:bb,at:st}];[...g].forEach((x,i)=>{c+=t[x];o.push({f:bb*Math.pow(2,c/1200),at:st+i+1,d:i===2?1.5:1})});return o};
+    const mk=(g,st,bb)=>{const o=[{f:bb,at:st}];genusCents(g).forEach((c,i)=>o.push({f:bb*Math.pow(2,c/1200),at:st+i+1,d:i===2?1.5:1}));return o};
     return {answers:pool,correct:k,label:x=>`<bdi dir="ltr">${x.split('').join(' ')}</bdi> · ${gName(x)}`,play:()=>play(mk(k,0,b)),ref:()=>play(pool.flatMap((g,i)=>mk(g,i*5.5,b)))}}
   if(Q.type==='dastgah'){const pool=[['minor','shur','major'],['shur','chahargah','homayoun','mahur'],['shur','chahargah','homayoun','mahur','segah','rast']][L];const k=rnd(pool);const d=degs(M[k].pat);
     const ev=[0,1,2,3,4,5,6,7,6,5,4,3,2,1,0].map((i,n)=>({f:fq(d[i]),at:n*.75,d:n===14?1.6:.75}));
@@ -858,6 +875,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#fbBtn')){sendFeedback();return}
   const seg=e.target.closest('.seg');if(seg){const m=M[seg.dataset.m],d=degs(m.pat),i=+seg.dataset.seg;play([{f:fq(d[i]),at:0},{f:fq(d[i+1]),at:1,d:1.3}]);return}
   const tk=e.target.closest('.tick');if(tk){playDeg(+tk.dataset.deg,M[tk.dataset.m],tk.id.replace(/\d+$/,''));return}
+  const alt=e.target.closest('[data-alt]');if(alt){play([{f:fq(+alt.dataset.alt),at:0,d:1.5}]);return}
   const dot=e.target.closest('.dot');if(dot){playDeg(+dot.dataset.deg);return}
   const iv=e.target.closest('[data-iv]');if(iv){playInterval(iv.dataset.iv,tonicFreq(),true);return}
   const vs=e.target.closest('[data-ivvs]');if(vs){const b=tonicFreq(),k=vs.dataset.ivvs;play([{f:b,at:0},{f:b*Math.pow(2,tun().T/1200),at:1,d:1.3},{f:b,at:3},{f:b*Math.pow(2,tun()[k]/1200),at:4,d:1.3}]);return}
@@ -878,5 +896,5 @@ $('#fPlay').onclick=()=>{const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0)p
 $('#stages').addEventListener('change',e=>{if(e.target.type==='checkbox'){const d=store.get('plan',{});d[e.target.id.slice(3)]=e.target.checked;store.set('plan',d)}});
 })();
 </script>
-</body>
-</html>
+
+</body></html>
