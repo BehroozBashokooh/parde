@@ -1,0 +1,153 @@
+<div class="wrap" id="app" dir="ltr" lang="en">
+  <header class="top">
+    <div class="brand">
+      <h1 id="h1"></h1>
+      <p data-i18n="sub"></p>
+    </div>
+    <div class="topright">
+      <button class="btn langbtn" id="langBtn" type="button"></button>
+      <div class="controls" aria-label="Sound settings">
+        <label class="field"><span data-i18n="tuning"></span>
+          <select id="tuning"><option value="nosa" data-i18n="tun_nosa"></option><option value="q" data-i18n="tun_q"></option></select>
+        </label>
+        <label class="field"><span data-i18n="sound"></span>
+          <select id="timbre"><option value="pluck" data-i18n="pluck"></option><option value="sine" data-i18n="sine"></option></select>
+        </label>
+        <label class="field"><span data-i18n="volume"></span> <input type="range" id="vol" min="0" max="1" step="0.05" value="0.8"></label>
+        <div class="field"><span id="aStat" data-s="unknown"></span><button class="btn" id="aTest" data-i18n="test"></button></div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="credit" id="credit" aria-labelledby="creditLbl">
+    <div class="lbl" id="creditLbl" data-i18n="credit_lbl"></div>
+    <div data-i18n="credit_body"></div>
+  </aside>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="explore" aria-selected="true" data-i18n="tab_explore"></button>
+    <button role="tab" data-tab="intervals" aria-selected="false" data-i18n="tab_intervals"></button>
+    <button role="tab" data-tab="ear" aria-selected="false" data-i18n="tab_ear"></button>
+    <button role="tab" data-tab="plan" aria-selected="false" data-i18n="tab_plan"></button>
+  </nav>
+
+  <!-- EXPLORER -->
+  <section class="panel" id="tab-explore">
+    <div class="box">
+      <div class="controls">
+        <label class="field"><span data-i18n="mode"></span> <select id="mode"></select></label>
+        <label class="field"><span data-i18n="cmp"></span> <select id="cmp"></select></label>
+        <label class="field"><span data-i18n="tonic"></span> <select id="tonic"></select></label>
+        <label class="field"><span data-i18n="tempo"></span> <span><input type="range" id="bpm" min="40" max="160" value="84"> <span id="bpmv" class="muted">84</span></span></label>
+      </div>
+      <div class="btnrow" style="margin-top:12px">
+        <button class="btn primary" id="pUp" data-i18n="up"></button>
+        <button class="btn" id="pDown" data-i18n="down"></button>
+        <button class="btn" id="pBoth" data-i18n="both"></button>
+        <button class="btn" id="pCmp" data-i18n="pcmp"></button>
+        <button class="btn" id="pDrone" aria-pressed="false"></button>
+        <button class="btn" id="pEcho" data-i18n="echo"></button>
+        <button class="btn" id="pStop" data-i18n="stop"></button>
+      </div>
+      <div id="echoStatus" class="muted" style="margin-top:8px;min-height:1.4em"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="box">
+        <h3 data-i18n="wheel_h"></h3>
+        <div id="wheel" class="ltr"></div>
+        <p class="muted" style="font-size:.8rem;margin-top:8px" id="wheelNote"></p>
+      </div>
+      <div class="box stack">
+        <div>
+          <div class="mode-title"><h2 id="mName"></h2><span class="fa" id="mFa"></span></div>
+          <div class="chips ltr" id="mChips"></div>
+          <p id="mDesc"></p>
+          <p class="note" id="mNote" hidden></p>
+          <div id="mSrc"></div>
+        </div>
+        <div>
+          <h3 data-i18n="ruler_h"></h3>
+          <div id="rulers" class="ltr"></div>
+        </div>
+        <div class="facts" id="facts"></div>
+      </div>
+    </div>
+
+    <div class="box" style="margin-top:16px">
+      <h3 data-i18n="deg_h"></h3>
+      <div class="tbl"><table id="dtable"></table></div>
+      <p class="note" data-i18n="model_note"></p>
+    </div>
+  </section>
+
+  <!-- INTERVALS -->
+  <section class="panel" id="tab-intervals" hidden>
+    <div class="stack">
+      <div class="box">
+        <h2 data-i18n="iv_h2"></h2>
+        <p data-i18n="iv_p"></p>
+        <div class="ivgrid" id="ivgrid"></div>
+      </div>
+      <div class="box">
+        <h2 data-i18n="cents_h2"></h2>
+        <p data-i18n="cents_p"></p>
+        <div class="formula ltr">cents = 1200 · log₂(f₂ / f₁)&nbsp;&nbsp;&nbsp;&nbsp;e.g. 9/8 → 1200·log₂(1.125) = 203.9¢</div>
+        <div class="controls" style="margin-top:12px">
+          <label class="field">f₁ (Hz) <input type="number" id="f1" value="261.63" step="0.01" style="width:110px"></label>
+          <label class="field">f₂ (Hz) <input type="number" id="f2" value="285" step="0.01" style="width:110px"></label>
+          <button class="btn" id="fPlay" data-i18n="playboth"></button>
+          <div class="field"><span data-i18n="result"></span> <span id="fRes" style="font-family:var(--mono);color:var(--ink);font-size:.95rem"></span></div>
+        </div>
+        <p class="note" data-i18n="beats_note"></p>
+      </div>
+      <div class="box">
+        <h2 data-i18n="mm_h2"></h2>
+        <p data-i18n="mm_p"></p>
+        <div id="mmRulers" class="ltr"></div>
+        <div class="btnrow"><button class="btn" data-play="major" data-i18n="play_major"></button><button class="btn" data-play="minor" data-i18n="play_minor"></button><button class="btn" data-play="shur" data-i18n="play_shur"></button></div>
+        <p class="note" data-i18n="mm_note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EAR -->
+  <section class="panel" id="tab-ear" hidden>
+    <div class="box">
+      <h2 data-i18n="ear_h2"></h2>
+      <p class="muted" data-i18n="ear_p"></p>
+      <div class="qtypes" id="qtypes"></div>
+      <div class="controls" style="margin-top:12px">
+        <label class="field"><span data-i18n="level"></span> <select id="qlevel"></select></label>
+        <label class="field"><span data-i18n="playas"></span> <select id="qhow"><option value="mel" data-i18n="mel"></option><option value="harm" data-i18n="harm"></option></select></label>
+      </div>
+      <div class="qarea">
+        <div id="qprompt" style="font-weight:500"></div>
+        <div class="btnrow"><button class="btn" id="qReplay" data-i18n="replay"></button><button class="btn" id="qStop" data-i18n="stop"></button><button class="btn" id="qRef" data-i18n="hear"></button><button class="btn primary" id="qNext" data-i18n="next"></button></div>
+        <div class="answers" id="qans"></div>
+        <div class="fb" id="qfb"></div>
+        <div class="score" id="qscore"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section class="panel" id="tab-plan" hidden>
+    <div class="stack">
+      <div class="box">
+        <h2 data-i18n="daily_h2"></h2>
+        <div class="routine">
+          <div class="rstep"><div class="t" data-i18n="r1t"></div><span data-i18n="r1"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r2t"></div><span data-i18n="r2"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r3t"></div><span data-i18n="r3"></span></div>
+          <div class="rstep"><div class="t" data-i18n="r4t"></div><span data-i18n="r4"></span></div>
+        </div>
+      </div>
+      <div class="box">
+        <h2 data-i18n="path_h2"></h2>
+        <p class="muted" data-i18n="path_p"></p>
+        <div id="stages"></div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,8 +1,21 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Parde</title>
+<meta name="description" content="Parde (پرده) — hear and measure the intervals of Persian music. Scale patterns and interval sizes after Nosa's ScalesTest app (music.nosa.com/ScalesTest), based on the research of Maestro Hamid Motebassem and Mehrdad Momeni.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232c4a9a'/%3E%3Cpath d='M9 7v18M9 15l12 5-12 5' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Vazirmatn:wght@400;600&display=swap">
 <style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<style>
+/* Parde · src/styles.css — design tokens (light/dark), layout, components, right-to-left rules. */
 :root{
   --bg:#f2f3f7; --surface:#ffffff; --sunk:#e8ebf2; --ink:#1b2233; --muted:#5a6377; --line:#d6dbe6;
   --T:#2c4a9a; --B:#b0721a; --J:#12837c; --S:#a3405a; --H:#6a4a9c;
@@ -159,7 +172,8 @@ a{color:var(--accent)}
 .srcbadge{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:none}
 a.srcbadge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 </style>
-
+</head>
+<body>
 <div class="wrap" id="app" dir="ltr" lang="en">
   <header class="top">
     <div class="brand">
@@ -315,10 +329,18 @@ a.srcbadge{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,
 </div>
 <script>
 (()=>{
+/* Parde · src/js/00-core.js
+   DOM helpers, per-browser storage (localStorage, wrapped so the app works without it), Nosa link.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const store={get(k,d){try{const v=localStorage.getItem('dlab-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('dlab-'+k,JSON.stringify(v))}catch(e){}}};
 const NOSA='https://music.nosa.com/ScalesTest/';
 
+/* Parde · src/js/10-i18n.js
+   All user-facing text in English and Persian (TX), and the tx()/L2() lookup helpers.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- text (English / فارسی) ---------- */
 const TX={
 en:{
@@ -418,6 +440,11 @@ fa:{
 const L2=(en,fa)=>S.lang==='fa'?fa:en;               // pick one of a pair
 const tx=(k,vars)=>{let s=(TX[S.lang]&&TX[S.lang][k]!=null)?TX[S.lang][k]:TX.en[k];if(vars&&typeof s==='string')for(const [a,b] of Object.entries(vars))s=s.split('{'+a+'}').join(b);return s};
 
+/* Parde · src/js/20-theory.js
+   Music model: tunings (Nosa / Vaziri 24-TET), Nosa degree positions and variable degrees,
+   the mode list incl. avaz derived from their dastgah, note spelling with koron/sori, app state S.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- theory model ---------- */
 const lg=x=>1200*Math.log2(x);
 const TUN={
@@ -561,6 +588,11 @@ function spell(i,cents,ti=S.tonic){
   const semi={'♭♭':-2,'♭':-1,'♯':1,'♯♯':2}[sh]||0; // korons/sori are measured from the plain letter
   return {html:`<bdi>${n}${acc}</bdi>`,txt:n+txt,name:n,sh,ref:100*([0,2,4,5,7,9,11][letter]+semi+12*oct),key:n+(semi<0?'♭'.repeat(-semi):'♯'.repeat(semi))};
 }
+/* Parde · src/js/30-audio.js
+   Sound: Web Audio live playback with an offline-render fallback, Karplus-Strong plucked string,
+   sine tone, drone, sequencing of notes with UI highlighting.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- audio ---------- */
 /* Live Web Audio when the browser lets the AudioContext run; otherwise every sound is
    rendered offline (OfflineAudioContext → WAV) and played through an <audio> element. */
@@ -601,7 +633,7 @@ function ksBuffer(c){ // one Karplus-Strong string at a fixed base; exact pitch 
 function note(c,f,t,dur,dest,gain=.5){
   if(S.timbre==='pluck'){
     const {buf,f0}=ksBuffer(c);
-    [[1,gain],[1.0012,gain*.45]].forEach(([det,g])=>{ // doubled course, like setar
+    [[.99963,gain],[1.00083,gain*.45]].forEach(([det,g])=>{ // doubled course, like setar; detunes centred so the perceived pitch stays exact
       const s=c.createBufferSource();s.buffer=buf;s.playbackRate.value=f/f0*det;
       const v=c.createGain();v.gain.setValueAtTime(g,t);v.gain.setTargetAtTime(0,t+Math.max(dur,.25)*1.3,.12);
       s.connect(v).connect(dest);s.start(t);s.stop(t+Math.max(dur,.25)*1.3+.8);
@@ -674,6 +706,11 @@ function setDrone(on){
 }
 function testSound(){play([{f:440,at:0,d:1},{f:660,at:1,d:1.5}])}
 
+/* Parde · src/js/40-explorer.js
+   Scale explorer tab: mode/tonic selects, interval ruler, cents wheel (SVG), analysis facts,
+   degree table with variable forms, scale playback, echo drill.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- explorer ---------- */
 function fillSelects(){
   const opt=(sel,withNone)=>{const v=sel.value;sel.innerHTML=(withNone?`<option value="">${tx('none')}</option>`:'')+['Western','Dastgah','Avaz & gusheh'].map(g=>`<optgroup label="${tx('g_'+g)}">`+MODES.filter(m=>m.g===g).map(m=>`<option value="${m.id}">${m.parent?'\u00a0\u00a0\u00a0'+(S.lang==='fa'?'↲ ':'↳ '):''}${mName(m)}</option>`).join('')+'</optgroup>').join('')};
@@ -766,6 +803,10 @@ function echoDrill(){
   next();
 }
 
+/* Parde · src/js/50-intervals.js
+   Building blocks tab: the five step sizes (T B J S H), cents calculator, major/minor rulers.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- intervals tab ---------- */
 function renderIntervals(){
   const t=tun();
@@ -776,6 +817,10 @@ function renderIntervals(){
 function playInterval(k,base=tonicFreq(),harm=false,cents){const f2=base*Math.pow(2,(cents??tun()[k])/1200);const ev=[{f:base,at:0},{f:f2,at:1,d:1.2}];if(harm)ev.push({f:[base,f2],at:2.6,d:2});play(ev)}
 function calc(){const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0){const c=lg(b/a);let best='T',bd=1e9;for(const k of 'TBJSH'){const dd=Math.abs(tun()[k]-Math.abs(c));if(dd<bd){bd=dd;best=k}}$('#fRes').textContent=tx('calc',{c:c.toFixed(1),b:Math.abs(a-b).toFixed(2),k:best})}}
 
+/* Parde · src/js/60-ear-training.js
+   Ear training tab: question generators (step size, major/minor, tetrachord, mode, degree), scoring.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- ear training ---------- */
 const QT={
   interval:{label:['Step size','اندازه‌ی فاصله'],levels:[['T vs B','T در برابر B'],['T · B · J','T · B · J'],['All five: T B J S H','هر پنج: T B J S H']],prompt:['Which step did you hear?','کدام فاصله را شنیدید؟']},
@@ -833,6 +878,10 @@ function answer(a,btn){
   showFb();renderScore();
 }
 
+/* Parde · src/js/70-practice-path.js
+   Practice path tab: staged plan with checkboxes saved per browser.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- plan ---------- */
 const STAGES=[
  [['Whole and half steps','پرده و نیم‌پرده'],['Hear T vs B; the major scale as T T B · T · T T B.','T و B را از هم تشخیص دهید؛ گام ماژور به صورت T T B · T · T T B.'],
@@ -853,6 +902,10 @@ function renderPlan(){
   $('#stages').innerHTML=STAGES.map(([h,p,items],i)=>`<div class="stage"><div class="no">${S.lang==='fa'?'۱۲۳۴۵۶'[i]:i+1}</div><div><h4>${L2(...h)}</h4><div class="muted" style="font-size:.9rem">${L2(...p)}</div><ul style="list-style:none;padding:0">${items.map((it,j)=>`<li><label class="chk"><input type="checkbox" id="pl-${i}-${j}" ${done[i+'-'+j]?'checked':''}> <span>${L2(...it)}</span></label></li>`).join('')}</ul></div></div>`).join('');
 }
 
+/* Parde · src/js/80-app.js
+   Language switching (incl. right-to-left), feedback button, and all event wiring. Runs last.
+   Fragment of one shared scope: tools/build.py concatenates src/js/*.js in name order
+   inside a single (()=>{ ... })() closure. Not an ES module. */
 /* ---------- language ---------- */
 function applyLang(){
   const app=$('#app');app.dir=S.lang==='fa'?'rtl':'ltr';app.lang=S.lang;
@@ -927,5 +980,5 @@ $('#fPlay').onclick=()=>{const a=+$('#f1').value,b=+$('#f2').value;if(a>0&&b>0)p
 $('#stages').addEventListener('change',e=>{if(e.target.type==='checkbox'){const d=store.get('plan',{});d[e.target.id.slice(3)]=e.target.checked;store.set('plan',d)}});
 })();
 </script>
-
-</body></html>
+</body>
+</html>

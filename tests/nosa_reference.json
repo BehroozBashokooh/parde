@@ -1,0 +1,18 @@
+{
+  "_source": "Read from Nosa's ScalesTest app (https://music.nosa.com/ScalesTest/): each scale degree's position on the circle (SVG rotation angle x 10/3 = cents from the key note Do). Bracketed degrees are Nosa's variable degrees. See tools/nosa_extract.js.",
+  "_constants": {"T": 203.91, "B": 90.22, "J_small": 143.5, "J_large": 150.63, "S": 264.32, "H": 317.6},
+  "modes": {
+    "shur":      {"nosa": "Shour",          "degrees": [0, 143.5, 294.13, 498.04, 701.95, 792.17, 996.08], "variable": [90.22, 641.54, 845.45]},
+    "afshari":   {"nosa": "Araq Afshari",   "degrees": [0, 203.91, 294.13, 498.04, 701.95, 905.86, 1049.36], "variable": [347.41, 996.08]},
+    "segah":     {"nosa": "Segah",          "degrees": [53.28, 203.91, 407.82, 551.32, 701.95, 905.86, 1109.77], "variable": [0, 755.23]},
+    "mokhalef":  {"nosa": "Mokhalef Segah", "degrees": [0, 203.91, 294.13, 498.04, 701.95, 845.45, 1049.36], "variable": [347.41, 996.08]},
+    "homayoun":  {"nosa": "Homayoun",       "degrees": [0, 143.5, 407.82, 498.04, 701.95, 792.17, 996.08], "variable": [90.22, 294.13, 845.45, 905.86]},
+    "chahargah": {"nosa": "Chehargah",      "degrees": [0, 143.5, 407.82, 498.04, 701.95, 845.45, 1109.77], "variable": [641.54]},
+    "mahur":     {"nosa": "Mahour",         "degrees": [0, 203.91, 407.82, 498.04, 701.95, 905.86, 1109.77], "variable": [294.13, 347.41, 845.45, 996.08]},
+    "araq":      {"nosa": "Araq Mahour",    "degrees": [0, 203.91, 294.13, 498.04, 701.95, 905.86, 1109.77], "variable": [407.82, 996.08]},
+    "rast":      {"nosa": "Rast",           "degrees": [0, 203.91, 347.41, 498.04, 701.95, 905.86, 1049.36], "variable": []},
+    "saba":      {"nosa": "Saba (Iranian intervals)", "degrees": [0, 203.91, 347.41, 498.04, 641.54, 905.86, 996.08], "variable": [90.22, 143.5]},
+    "sabaAr":    {"nosa": "Saba (Arabic intervals)",  "degrees": [0, 203.91, 347.41, 498.04, 588.26, 905.86, 996.08], "variable": [90.22, 143.5]},
+    "major":     {"nosa": "Major mode (Western classical)", "degrees": [0, 203.91, 407.82, 498.04, 701.95, 905.86, 1109.77], "variable": [611.73, 815.64]}
+  }
+}
